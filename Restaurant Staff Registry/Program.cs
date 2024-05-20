@@ -13,6 +13,6 @@ Welcome to staff registry!
 
 StaffRepository repository = new();
 StaffRegistryService service = new(repository);
-MenuView view = new();
-MenuController menuController = new(service, view);
+StaffRegistryView view = new();
+StaffRegistryController menuController = new(service, view);
 menuController.StartStaffRegistryMenu();

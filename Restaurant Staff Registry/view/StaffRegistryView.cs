@@ -1,6 +1,7 @@
 ﻿using Retaurant_Staff_Registry.constants;
 using Retaurant_Staff_Registry.model;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,7 +10,7 @@ using System.Xml.Linq;
 
 namespace Retaurant_Staff_Registry.view;
 
-public class MenuView
+public class StaffRegistryView
 {
     public MenuItem GetMenuInput()
     {
@@ -63,20 +64,23 @@ public class MenuView
         """);
     }
 
-    public void PrintStaffAddedSuccessfully (
-        (string fname, string lname, double salary) staffItems
-    )
+    public void PrintStaffAddedSuccessfully (Staff staff)
     {
         Console.WriteLine($"""
-            Staff {staffItems.fname} {staffItems.lname} with salary {staffItems.salary}$
+            Staff {staff.Fname} {staff.Lname} with salary {staff.Salary}$
             have been added to the registry.
 
         """);
     }
 
-    public void PrintStaffAddedUnsuccessfully()
+    public void PrintStaffAddedUnsuccessfully(Staff staff)
     {
-        Console.WriteLine("Invalid staff entry");
+        Console.WriteLine($"""
+            Failure! Staff {staff.Fname} {staff.Lname} with salary {staff.Salary}$
+            could not be added to the registry.
+        
+        """
+        );
     }
 
     public void PrintAllStaffEntries(List<Staff> staffEntries)

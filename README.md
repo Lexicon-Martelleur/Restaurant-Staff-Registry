@@ -30,6 +30,4 @@ Denna klass kan också vid utökning av programmet lyssna på event från **Staf
 
 ## 3. Todo
 
-- Implementera en mer event driven kommunikation för smidigare kommunikation mellan controller klass och service klass.
-
 - Se över testerna, för närvarande är testerna implementerade som *dummy tester* (tester utan värde).

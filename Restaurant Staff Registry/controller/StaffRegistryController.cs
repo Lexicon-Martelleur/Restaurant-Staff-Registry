@@ -1,4 +1,6 @@
-﻿using Retaurant_Staff_Registry.constants;
+﻿using Retaurant_Staff_Registry.constant;
+using Retaurant_Staff_Registry.constants;
+using Retaurant_Staff_Registry.events;
 using Retaurant_Staff_Registry.model;
 using Retaurant_Staff_Registry.view;
 using System;
@@ -9,12 +11,12 @@ using System.Threading.Tasks;
 
 namespace Retaurant_Staff_Registry.controller;
 
-public class MenuController(StaffRegistryService service, MenuView view)
+public class StaffRegistryController(StaffRegistryService service, StaffRegistryView view)
 {
     private readonly HashSet<int> _staffIDs = [];
     public void StartStaffRegistryMenu () {
+        AddStaffRegistryEventListners();
         bool continueApp = true;
-
         while (continueApp)
         {
             try {
@@ -34,6 +36,12 @@ public class MenuController(StaffRegistryService service, MenuView view)
         }
     }
 
+    private void AddStaffRegistryEventListners()
+    {
+        service.StaffRegistryEvent += HandleAddStaffSucess;
+        service.StaffRegistryEvent += HandleAddStaffFailure;
+    }
+
     private bool Continue(Action action, bool exit)
     {
         action();
@@ -43,6 +51,8 @@ public class MenuController(StaffRegistryService service, MenuView view)
     private void HandleExit()
     {
         List<Staff> staffEntries = service.GetAllStaffEntries();
+        service.StaffRegistryEvent -= this.HandleAddStaffSucess;
+        service.StaffRegistryEvent -= this.HandleAddStaffFailure;
         view.PrintAllStaffEntries(staffEntries);
     }
 
@@ -54,20 +64,13 @@ public class MenuController(StaffRegistryService service, MenuView view)
 
     private void HandleAddStaffMenu ()
     {
-        try
-        {
-            var staffItems = view.GetStaffInput();
-            service.AddStaff(new(
-                staffItems.fname,
-                staffItems.lname,
-                staffItems.salary,
-                GetStaffID())
-            );
-            view.PrintStaffAddedSuccessfully(staffItems);
-        } catch
-        {
-            view.PrintStaffAddedUnsuccessfully();
-        }
+        var staffItems = view.GetStaffInput();
+        service.AddStaff(new(
+            staffItems.fname,
+            staffItems.lname,
+            staffItems.salary,
+            GetStaffID())
+        );
     }
 
     private int GetStaffID ()
@@ -85,5 +88,21 @@ public class MenuController(StaffRegistryService service, MenuView view)
     {
         List<Staff> staffEntries = service.GetAllStaffEntries();
         view.PrintAllStaffEntries(staffEntries);
+    }
+
+    private void HandleAddStaffSucess (object? sender, StaffRegistryEvent e)
+    {
+        if (e.Status == RepositoryResult.ADD_STAFF_OK)
+        {
+            view.PrintStaffAddedSuccessfully(e.Data);
+        }
+    }
+
+    private void HandleAddStaffFailure(object? sender, StaffRegistryEvent e)
+    {
+        if (e.Status == RepositoryResult.ADD_STAFF_FAILURE)
+        {
+            view.PrintStaffAddedUnsuccessfully(e.Data);
+        }
     }
 }
