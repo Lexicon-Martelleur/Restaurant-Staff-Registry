@@ -73,7 +73,7 @@ public class MenuController(StaffRegistryService service, MenuView view)
     private int GetStaffID ()
     {
         Random random = new();
-        int id = 0;
+        int id;
         do
         {
             id = random.Next(1, int.MaxValue);

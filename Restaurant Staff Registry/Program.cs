@@ -16,5 +16,3 @@ StaffRegistryService service = new(repository);
 MenuView view = new();
 MenuController menuController = new(service, view);
 menuController.StartStaffRegistryMenu();
-
-
