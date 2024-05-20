@@ -9,7 +9,5 @@ namespace Retaurant_Staff_Registry.constant;
 public enum RepositoryResult
 {
     ADD_STAFF_OK,
-    ADD_STAFF_FAILURE,
-    LIST_STAFF_OK,
-    LIST_STAFF_FAILURE,
+    ADD_STAFF_FAILURE
 }
