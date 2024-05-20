@@ -12,15 +12,26 @@ namespace Retaurant_Staff_Registry.view;
 
 public class StaffRegistryView
 {
+    public void PrintWelcome()
+    {
+        Console.Clear();
+        Console.WriteLine($"""
+
+        ========================================================
+         🍕🍕🍕 Welcome to my restaurant staff registry 🍕🍕🍕
+        ========================================================
+
+        """);
+    }
     public MenuItem GetMenuInput()
     {
         Console.WriteLine("""
+
     Staff registry menu
+    ===================
         1) Add staff entry
         2) List all staff entries
-        Q) Exit staff registry  
-
-
+        Q) Exit staff registry
     """);
         Console.Write("Select menu item: ");
         var selectedMenu = Console.ReadLine();
@@ -38,7 +49,7 @@ public class StaffRegistryView
 
     public (string fname, string lname, double salary) GetStaffInput ()
     {
-        Console.Write("Enter new staff (Firstname Lastname Salary$): ");
+        Console.Write("\nEnter new staff (Firstname Lastname Salary$): ");
         string newStaffInput = Console.ReadLine() ?? "";
         string[] newStaff = newStaffInput.Split(' ', StringSplitOptions.RemoveEmptyEntries);
 
@@ -51,17 +62,12 @@ public class StaffRegistryView
 
     public void PrintExit()
     {
-        Console.WriteLine("""
-            Goodbye
-        """);
+        Console.WriteLine("\n🍕🍕🍕 Goodbye 🍕🍕🍕");
     }
 
     public void PrintInvalidMenuChoise()
     {
-        Console.WriteLine("""
-            Not a valid menu
-
-        """);
+        Console.WriteLine("\n⚠️ Not a valid menu");
     }
 
     public void PrintStaffAddedSuccessfully (Staff staff)
@@ -69,26 +75,30 @@ public class StaffRegistryView
         Console.WriteLine($"""
             Staff {staff.Fname} {staff.Lname} with salary {staff.Salary}$
             have been added to the registry.
-
         """);
     }
 
     public void PrintStaffAddedUnsuccessfully(Staff staff)
     {
         Console.WriteLine($"""
-            Failure! Staff {staff.Fname} {staff.Lname} with salary {staff.Salary}$
+            ⚠️ Failure! Staff {staff.Fname} {staff.Lname} with salary {staff.Salary}$
             could not be added to the registry.
-        
         """
         );
     }
 
     public void PrintAllStaffEntries(List<Staff> staffEntries)
     {
+        Console.WriteLine("\nList of registered staff:");
+        
+        if (staffEntries.Count == 0)
+        {
+            Console.WriteLine("🚀 Empty");
+        }
         foreach (var staff in staffEntries)
         {
             Console.WriteLine($"""
-                * {staff.Fname} {staff.Lname}, salary {staff.Salary}$ 
+                🚀 {staff.Fname} {staff.Lname}, salary {staff.Salary}$ 
             """);
         }
         Console.WriteLine("");

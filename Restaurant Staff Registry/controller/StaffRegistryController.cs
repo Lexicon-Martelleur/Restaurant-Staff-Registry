@@ -15,6 +15,7 @@ public class StaffRegistryController(StaffRegistryService service, StaffRegistry
 {
     private readonly HashSet<int> _staffIDs = [];
     public void StartStaffRegistryMenu () {
+        view.PrintWelcome();
         AddStaffRegistryEventListners();
         bool continueApp = true;
         while (continueApp)
@@ -26,6 +27,7 @@ public class StaffRegistryController(StaffRegistryService service, StaffRegistry
                     MenuItem.EXIT => Continue(HandleExit, false),
                     MenuItem.LIST_ALL_STAFF => Continue(HandleSelectAllStaffEntries, true),
                     MenuItem.ADD_STAFF => Continue(HandleAddStaffMenu, true),
+                    MenuItem.DEFAULT => Continue(HandleInvalidChoice, true),
                     _ => Continue(HandleInvalidChoice, true)
                 };
             }
@@ -50,10 +52,9 @@ public class StaffRegistryController(StaffRegistryService service, StaffRegistry
 
     private void HandleExit()
     {
-        List<Staff> staffEntries = service.GetAllStaffEntries();
         service.StaffRegistryEvent -= this.HandleAddStaffSucess;
         service.StaffRegistryEvent -= this.HandleAddStaffFailure;
-        view.PrintAllStaffEntries(staffEntries);
+        view.PrintExit();
     }
 
     private void HandleSelectAllStaffEntries()
@@ -86,8 +87,7 @@ public class StaffRegistryController(StaffRegistryService service, StaffRegistry
 
     private void HandleInvalidChoice()
     {
-        List<Staff> staffEntries = service.GetAllStaffEntries();
-        view.PrintAllStaffEntries(staffEntries);
+        view.PrintInvalidMenuChoise();
     }
 
     private void HandleAddStaffSucess (object? sender, StaffRegistryEvent e)

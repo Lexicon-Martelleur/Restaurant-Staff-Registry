@@ -3,14 +3,6 @@ using Retaurant_Staff_Registry.controller;
 using Retaurant_Staff_Registry.model;
 using Retaurant_Staff_Registry.view;
 
-Console.WriteLine("""
-
-==========================
-Welcome to staff registry!
-==========================
-
-""");
-
 StaffRepository repository = new();
 StaffRegistryService service = new(repository);
 StaffRegistryView view = new();
