@@ -1,4 +1,4 @@
-﻿using Retaurant_Staff_Registry.constants;
+﻿using Retaurant_Staff_Registry.constant;
 using Retaurant_Staff_Registry.model;
 using System;
 using System.Collections;
@@ -67,22 +67,27 @@ public class StaffRegistryView
 
     public void PrintInvalidMenuChoise()
     {
-        Console.WriteLine("\n⚠️ Not a valid menu");
+        Console.WriteLine("\n⚠️ Not valid selection");
     }
 
     public void PrintStaffAddedSuccessfully (Staff staff)
     {
         Console.WriteLine($"""
-            Staff {staff.Fname} {staff.Lname} with salary {staff.Salary}$
-            have been added to the registry.
+        ✅ Staff {staff.Fname} {staff.Lname} with salary {staff.Salary}$
+        have been added to the registry.
         """);
+    }
+
+    public void PrintStaffAddedUnsuccessfully()
+    {
+        Console.WriteLine("⚠️ Failure! Staff could not be added to the registry");
     }
 
     public void PrintStaffAddedUnsuccessfully(Staff staff)
     {
         Console.WriteLine($"""
-            ⚠️ Failure! Staff {staff.Fname} {staff.Lname} with salary {staff.Salary}$
-            could not be added to the registry.
+        ⚠️ Failure! Staff {staff.Fname} {staff.Lname} with salary {staff.Salary}$
+        could not be added to the registry.
         """
         );
     }

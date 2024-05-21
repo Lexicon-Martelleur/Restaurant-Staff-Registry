@@ -16,9 +16,9 @@ public class StaffRegistryService(IStaffRepository repository)
     public void AddStaff(Staff staff)
     {
         if (
-            staff.Fname.Length > 10 ||
-            staff.Lname.Length > 10 ||
-            staff.Salary < 1000 || staff.Salary > 2000)
+            staff.Fname.Length < Staff.MIN_NAME_SIZE || staff.Fname.Length > Staff.MAX_NAME_SIZE ||
+            staff.Fname.Length < Staff.MIN_NAME_SIZE || staff.Fname.Length > Staff.MAX_NAME_SIZE ||
+            staff.Salary < Staff.MIN_SALARY || staff.Salary > Staff.MAX_SALARY)
         {
             OnAddStaffFailure(staff, "Invalid staff value");
         } else

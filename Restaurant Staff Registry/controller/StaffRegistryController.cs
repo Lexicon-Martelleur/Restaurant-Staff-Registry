@@ -1,5 +1,4 @@
 ﻿using Retaurant_Staff_Registry.constant;
-using Retaurant_Staff_Registry.constants;
 using Retaurant_Staff_Registry.events;
 using Retaurant_Staff_Registry.model;
 using Retaurant_Staff_Registry.view;
@@ -11,25 +10,20 @@ using System.Threading.Tasks;
 
 namespace Retaurant_Staff_Registry.controller;
 
-public class StaffRegistryController(StaffRegistryService service, StaffRegistryView view)
+public class StaffRegistryController(
+    StaffRegistryService service,
+    StaffRegistryView view)
 {
     private readonly HashSet<int> _staffIDs = [];
     public void StartStaffRegistryMenu () {
         view.PrintWelcome();
         AddStaffRegistryEventListners();
-        bool continueApp = true;
-        while (continueApp)
+        bool useMenu = true;
+        while (useMenu)
         {
             try {
                 var menuItem = view.GetMenuInput();
-                continueApp = menuItem switch
-                {
-                    MenuItem.EXIT => Continue(HandleExit, false),
-                    MenuItem.LIST_ALL_STAFF => Continue(HandleSelectAllStaffEntries, true),
-                    MenuItem.ADD_STAFF => Continue(HandleAddStaffMenu, true),
-                    MenuItem.DEFAULT => Continue(HandleInvalidChoice, true),
-                    _ => Continue(HandleInvalidChoice, true)
-                };
+                useMenu = HandleMenuSelection(menuItem);
             }
             catch
             {
@@ -44,10 +38,24 @@ public class StaffRegistryController(StaffRegistryService service, StaffRegistry
         service.StaffRegistryEvent += HandleAddStaffFailure;
     }
 
+    private bool HandleMenuSelection(MenuItem menuItem) => menuItem switch
+    {
+        MenuItem.DEFAULT => Continue(HandleInvalidChoice, true),
+        MenuItem.EXIT => Continue(HandleExit, false),
+        MenuItem.LIST_ALL_STAFF => Continue(HandleSelectAllStaffEntries, true),
+        MenuItem.ADD_STAFF => Continue(HandleAddStaffMenu, true),
+        _ => Continue(HandleInvalidChoice, true)
+    };
+
     private bool Continue(Action action, bool exit)
     {
         action();
         return exit;
+    }
+
+    private void HandleInvalidChoice()
+    {
+        view.PrintInvalidMenuChoise();
     }
 
     private void HandleExit()
@@ -65,13 +73,20 @@ public class StaffRegistryController(StaffRegistryService service, StaffRegistry
 
     private void HandleAddStaffMenu ()
     {
-        var staffItems = view.GetStaffInput();
-        service.AddStaff(new(
-            staffItems.fname,
-            staffItems.lname,
-            staffItems.salary,
-            GetStaffID())
-        );
+        try
+        {
+            var staffItems = view.GetStaffInput();
+            service.AddStaff(new(
+                staffItems.fname,
+                staffItems.lname,
+                staffItems.salary,
+                GetStaffID())
+            );
+        }
+        catch (Exception)
+        {
+            view.PrintStaffAddedUnsuccessfully();
+        }
     }
 
     private int GetStaffID ()
@@ -83,11 +98,6 @@ public class StaffRegistryController(StaffRegistryService service, StaffRegistry
             id = random.Next(1, int.MaxValue);
         } while (!_staffIDs.Add(id));
         return id;
-    }
-
-    private void HandleInvalidChoice()
-    {
-        view.PrintInvalidMenuChoise();
     }
 
     private void HandleAddStaffSucess (object? sender, StaffRegistryEvent e)

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Retaurant_Staff_Registry.constants;
+namespace Retaurant_Staff_Registry.constant;
 
 public enum MenuItem
 {
