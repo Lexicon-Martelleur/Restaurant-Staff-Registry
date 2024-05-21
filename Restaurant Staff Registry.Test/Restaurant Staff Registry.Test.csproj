@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Retaurant Staff Registry\Retaurant Staff Registry.csproj" />
+    <ProjectReference Include="..\Restaurant Staff Registry\Restaurant Staff Registry.csproj" />
   </ItemGroup>
 
 </Project>

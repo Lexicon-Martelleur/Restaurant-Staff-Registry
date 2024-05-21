@@ -44,7 +44,11 @@ public class StaffTest
 
             foreach (var staff in staffEntries)
             {
-                f.StaffRegistryService.AddStaff(staff);
+                f.StaffRegistryService.AddStaff((
+                    staff.Fname,
+                    staff.Lname,
+                    staff.Salary
+                    ));
             }
 
             var result = f.StaffRegistryService.GetAllStaffEntries();

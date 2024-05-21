@@ -70,10 +70,13 @@ public class StaffRegistryView
         Console.WriteLine("\n⚠️ Not valid selection");
     }
 
-    public void PrintStaffAddedSuccessfully (Staff staff)
+    public void PrintStaffAddedSuccessfully ((
+        string fname,
+        string lname,
+        double salary) staffItems)
     {
         Console.WriteLine($"""
-        ✅ Staff {staff.Fname} {staff.Lname} with salary {staff.Salary}$
+        ✅ Staff {staffItems.fname} {staffItems.lname} with salary {staffItems.salary}$
         have been added to the registry.
         """);
     }
@@ -83,10 +86,13 @@ public class StaffRegistryView
         Console.WriteLine("⚠️ Failure! Staff could not be added to the registry");
     }
 
-    public void PrintStaffAddedUnsuccessfully(Staff staff)
+    public void PrintStaffAddedUnsuccessfully((
+        string fname,
+        string lname,
+        double salary) staffItems)
     {
         Console.WriteLine($"""
-        ⚠️ Failure! Staff {staff.Fname} {staff.Lname} with salary {staff.Salary}$
+        ⚠️ Failure! Staff {staffItems.fname} {staffItems.lname} with salary {staffItems.salary}$
         could not be added to the registry.
         """
         );

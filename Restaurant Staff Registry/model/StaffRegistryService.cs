@@ -12,37 +12,59 @@ namespace Retaurant_Staff_Registry.model;
 
 public class StaffRegistryService(IStaffRepository repository)
 {
+    private readonly HashSet<int> _staffIDs = [];
+
     public EventHandler<StaffRegistryEvent>? StaffRegistryEvent;
-    public void AddStaff(Staff staff)
+    public void AddStaff((string fname, string lname, double salary) staffItems)
     {
-        if (
-            staff.Fname.Length < Staff.MIN_NAME_SIZE || staff.Fname.Length > Staff.MAX_NAME_SIZE ||
-            staff.Fname.Length < Staff.MIN_NAME_SIZE || staff.Fname.Length > Staff.MAX_NAME_SIZE ||
-            staff.Salary < Staff.MIN_SALARY || staff.Salary > Staff.MAX_SALARY)
-        {
-            OnAddStaffFailure(staff, "Invalid staff value");
-        } else
-        {
+        try {
+            Console.WriteLine($"staffItems {staffItems}");
+            Staff staff = new(
+                staffItems.fname,
+                staffItems.lname,
+                staffItems.salary,
+                GetStaffID());
             repository.AddStaff(staff);
-            OnAddStaffOk(staff);
+            OnAddStaffOk(staffItems);
+        }
+        catch (ArgumentOutOfRangeException ex)
+        {
+            OnAddStaffFailure(staffItems, ex.Message);
+        }
+        catch
+        {
+            OnAddStaffFailure(staffItems, "Invalid property value");
         }
     }
 
-    private void OnAddStaffOk(Staff staff)
+    private int GetStaffID()
+    {
+        Random random = new();
+        int id;
+        do
+        {
+            id = random.Next(1, int.MaxValue);
+        } while (!_staffIDs.Add(id));
+        return id;
+    }
+
+    private void OnAddStaffOk((string fname, string lname, double salary) staffItems)
     {
         StaffRegistryEvent?.Invoke(this, new StaffRegistryEvent(
             RepositoryResult.ADD_STAFF_OK,
             "Staff registred ok",
-            staff
+            staffItems
         ));
     }
 
-    private void OnAddStaffFailure(Staff staff, string msg)
+    private void OnAddStaffFailure(
+        (string fname, string lname, double salary) staffItems,
+        string msg)
     {
         StaffRegistryEvent?.Invoke(this, new StaffRegistryEvent(
             RepositoryResult.ADD_STAFF_FAILURE,
             msg,
-            staff
+            staffItems
         ));
     }
 

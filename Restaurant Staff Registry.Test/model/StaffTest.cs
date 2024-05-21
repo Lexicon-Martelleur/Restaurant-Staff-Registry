@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Retaurant_Staff_Registry.model;
+﻿using Retaurant_Staff_Registry.model;
 
 namespace Restaurant_Staff_Registry.Test.model;
 

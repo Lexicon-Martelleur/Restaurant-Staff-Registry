@@ -14,7 +14,6 @@ public class StaffRegistryController(
     StaffRegistryService service,
     StaffRegistryView view)
 {
-    private readonly HashSet<int> _staffIDs = [];
     public void StartStaffRegistryMenu () {
         view.PrintWelcome();
         AddStaffRegistryEventListners();
@@ -76,28 +75,12 @@ public class StaffRegistryController(
         try
         {
             var staffItems = view.GetStaffInput();
-            service.AddStaff(new(
-                staffItems.fname,
-                staffItems.lname,
-                staffItems.salary,
-                GetStaffID())
-            );
+            service.AddStaff(staffItems);
         }
         catch (Exception)
         {
             view.PrintStaffAddedUnsuccessfully();
         }
-    }
-
-    private int GetStaffID ()
-    {
-        Random random = new();
-        int id;
-        do
-        {
-            id = random.Next(1, int.MaxValue);
-        } while (!_staffIDs.Add(id));
-        return id;
     }
 
     private void HandleAddStaffSucess (object? sender, StaffRegistryEvent e)

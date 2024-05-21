@@ -9,11 +9,14 @@ using System.Threading.Tasks;
 namespace Retaurant_Staff_Registry.events;
 
 public class StaffRegistryEvent(
-    RepositoryResult status, string msg, Staff data) : EventArgs
+    RepositoryResult status,
+    string msg,
+    (string fname, string lname, double salary) data
+    ) : EventArgs
 {
     public RepositoryResult Status { get; } = status;
 
     public String Msg { get; } = msg;
 
-    public Staff Data { get; } = data;
+    public (string fname, string lname, double salary) Data { get; } = data;
 }
