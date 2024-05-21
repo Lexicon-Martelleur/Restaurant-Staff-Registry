@@ -10,6 +10,7 @@ using System.Xml.Linq;
 
 namespace Retaurant_Staff_Registry.view;
 
+//TODO! Update view class to be more UI friendly.
 public class StaffRegistryView
 {
     public void PrintWelcome()
@@ -42,8 +43,7 @@ public class StaffRegistryView
     {
         "1" => MenuItem.ADD_STAFF,
         "2" => MenuItem.LIST_ALL_STAFF,
-        "q" => MenuItem.EXIT,
-        "Q" => MenuItem.EXIT,
+        "q" or "Q" => MenuItem.EXIT,
         _ => MenuItem.DEFAULT
     };
 
@@ -98,7 +98,7 @@ public class StaffRegistryView
         );
     }
 
-    public void PrintAllStaffEntries(List<Staff> staffEntries)
+    public void PrintAllStaffEntries(IReadOnlyList<Staff> staffEntries)
     {
         Console.WriteLine("\nList of registered staff:");
         

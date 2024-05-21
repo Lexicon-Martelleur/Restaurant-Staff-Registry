@@ -15,8 +15,8 @@ internal class StaffRepository : IStaffRepository
         _staffEntries.Add(staff);
     }
 
-    public List<Staff> GetAllStaffEntries()
+    public IReadOnlyList<Staff> GetAllStaffEntries()
     {
-        return _staffEntries;
+        return _staffEntries.AsReadOnly();
     }
 }

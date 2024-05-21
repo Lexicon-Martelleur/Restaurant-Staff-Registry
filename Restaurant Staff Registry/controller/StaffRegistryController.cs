@@ -13,17 +13,18 @@ public class StaffRegistryController(
         view.PrintWelcome();
         AddStaffRegistryEventListners();
         bool useMenu = true;
-        while (useMenu)
+        do
         {
-            try {
-                var menuItem = view.GetMenuInput();
+            try
+            {
+                MenuItem menuItem = view.GetMenuInput();
                 useMenu = HandleMenuSelection(menuItem);
             }
             catch
             {
                 Continue(HandleInvalidChoice, true);
             }
-        }
+        } while (useMenu);
     }
 
     private void AddStaffRegistryEventListners()
@@ -61,7 +62,7 @@ public class StaffRegistryController(
 
     private void HandleSelectAllStaffEntries()
     {
-        List<Staff> staffEntries = service.GetAllStaffEntries();
+        IReadOnlyList<Staff> staffEntries = service.GetAllStaffEntries();
         view.PrintAllStaffEntries(staffEntries);
     }
 

@@ -68,7 +68,7 @@ public class StaffRegistryService(IStaffRepository repository)
         ));
     }
 
-    public List<Staff> GetAllStaffEntries()
+    public IReadOnlyList<Staff> GetAllStaffEntries()
     {
         return repository.GetAllStaffEntries(); 
     }
