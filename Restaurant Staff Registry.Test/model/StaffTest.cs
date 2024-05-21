@@ -22,5 +22,22 @@ public class StaffTest
             Assert.Equal(staff.Salary, salary);
             Assert.Equal(staff.StaffID, staffID);
         }
+
+        public static IEnumerable<object[]> InvalidTestData = [
+            ["Eric", "Larsson", -236666.3, 1],
+            ["Lisa", "", -336666.3, 2],
+            ["", "Jonsson", -436666.3, 3],
+        ];
+
+        [Theory(DisplayName = "Do not create a staff entry")]
+        [MemberData(nameof(InvalidTestData))]
+        public void T2(string fname, string lname, double salary, int staffID)
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
+            {
+                Staff staff = new(fname, lname, salary, staffID);
+            }
+            );
+        }
     }
 }
