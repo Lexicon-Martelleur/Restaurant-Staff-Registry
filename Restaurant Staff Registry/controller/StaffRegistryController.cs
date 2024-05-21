@@ -33,8 +33,8 @@ public class StaffRegistryController(
 
     private void AddStaffRegistryEventListners()
     {
-        service.StaffRegistryEvent += HandleAddStaffSucess;
-        service.StaffRegistryEvent += HandleAddStaffFailure;
+        service.StaffRegistryEventHandler += HandleAddStaffSucess;
+        service.StaffRegistryEventHandler += HandleAddStaffFailure;
     }
 
     private bool HandleMenuSelection(MenuItem menuItem) => menuItem switch
@@ -59,8 +59,8 @@ public class StaffRegistryController(
 
     private void HandleExit()
     {
-        service.StaffRegistryEvent -= this.HandleAddStaffSucess;
-        service.StaffRegistryEvent -= this.HandleAddStaffFailure;
+        service.StaffRegistryEventHandler -= this.HandleAddStaffSucess;
+        service.StaffRegistryEventHandler -= this.HandleAddStaffFailure;
         view.PrintExit();
     }
 

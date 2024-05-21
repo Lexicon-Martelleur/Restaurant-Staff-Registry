@@ -11,7 +11,7 @@ namespace Retaurant_Staff_Registry.model;
 public class Staff
 {
     public static readonly int MIN_SALARY = 1;
-    public static readonly int MAX_SALARY = 999999;
+    public static readonly int MAX_SALARY = 9999999;
     public static readonly int MIN_NAME_SIZE = 1;
     public static readonly int MAX_NAME_SIZE = 100;
     private string _fname = "Anonymous";
@@ -70,7 +70,7 @@ public class Staff
             }
             else
             {
-                throw new ArgumentOutOfRangeException(nameof(Salary), "Invalid salary range");
+                throw new ArgumentOutOfRangeException(nameof(Salary), $"Invalid salary range {value}");
             }
         }
     }
