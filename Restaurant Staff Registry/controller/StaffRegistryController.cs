@@ -9,7 +9,7 @@ public class StaffRegistryController(
     StaffRegistryService service,
     StaffRegistryView view)
 {
-    public void StartStaffRegistryMenu () {
+    public void StartMenu () {
         view.PrintWelcome();
         AddStaffRegistryEventListners();
         bool useMenu = true;
@@ -17,12 +17,12 @@ public class StaffRegistryController(
         {
             try
             {
-                MenuItem menuItem = view.GetMenuInput();
+                MenuItem menuItem = view.ReadMenuSelection();
                 useMenu = HandleMenuSelection(menuItem);
             }
             catch
             {
-                Continue(HandleInvalidChoice, true);
+                useMenu = ContinueMenu(HandleInvalidChoice, true);
             }
         } while (useMenu);
     }
@@ -35,17 +35,17 @@ public class StaffRegistryController(
 
     private bool HandleMenuSelection(MenuItem menuItem) => menuItem switch
     {
-        MenuItem.DEFAULT => Continue(HandleInvalidChoice, true),
-        MenuItem.EXIT => Continue(HandleExit, false),
-        MenuItem.LIST_ALL_STAFF => Continue(HandleSelectAllStaffEntries, true),
-        MenuItem.ADD_STAFF => Continue(HandleAddStaffMenu, true),
-        _ => Continue(HandleInvalidChoice, true)
+        MenuItem.DEFAULT => ContinueMenu(HandleInvalidChoice, true),
+        MenuItem.EXIT => ContinueMenu(HandleExit, false),
+        MenuItem.LIST_ALL_STAFF => ContinueMenu(HandleSelectAllStaffEntries, true),
+        MenuItem.ADD_STAFF => ContinueMenu(HandleAddStaffMenu, true),
+        _ => ContinueMenu(HandleInvalidChoice, true)
     };
 
-    private bool Continue(Action action, bool exit)
+    private bool ContinueMenu(Action action, bool exitMenu)
     {
         action();
-        return exit;
+        return exitMenu;
     }
 
     private void HandleInvalidChoice()
@@ -70,7 +70,7 @@ public class StaffRegistryController(
     {
         try
         {
-            var staffItems = view.GetStaffInput();
+            var staffItems = view.ReadNewStaffInput();
             service.AddStaff(staffItems);
         }
         catch (Exception)

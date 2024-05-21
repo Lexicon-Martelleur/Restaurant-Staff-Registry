@@ -6,4 +6,4 @@ StaffRepository repository = new();
 StaffRegistryService service = new(repository);
 StaffRegistryView view = new();
 StaffRegistryController menuController = new(service, view);
-menuController.StartStaffRegistryMenu();
+menuController.StartMenu();

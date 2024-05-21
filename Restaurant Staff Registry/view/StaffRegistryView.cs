@@ -10,7 +10,9 @@ using System.Xml.Linq;
 
 namespace Retaurant_Staff_Registry.view;
 
-//TODO! Update view class to be more UI friendly.
+//TODO! Update view class to be more UI friendly!
+//  1) Add animations
+//  2) Add colors.
 public class StaffRegistryView
 {
     public void PrintWelcome()
@@ -24,7 +26,7 @@ public class StaffRegistryView
 
         """);
     }
-    public MenuItem GetMenuInput()
+    public MenuItem ReadMenuSelection()
     {
         Console.WriteLine("""
 
@@ -47,7 +49,7 @@ public class StaffRegistryView
         _ => MenuItem.DEFAULT
     };
 
-    public (string fname, string lname, double salary) GetStaffInput ()
+    public (string fname, string lname, double salary) ReadNewStaffInput ()
     {
         Console.Write("\nEnter new staff (FirstName LastName Salary$): ");
         string newStaffInput = Console.ReadLine() ?? "";
