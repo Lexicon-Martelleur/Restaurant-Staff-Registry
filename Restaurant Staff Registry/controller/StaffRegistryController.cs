@@ -2,11 +2,6 @@
 using Retaurant_Staff_Registry.events;
 using Retaurant_Staff_Registry.model;
 using Retaurant_Staff_Registry.view;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Retaurant_Staff_Registry.controller;
 
@@ -54,7 +49,7 @@ public class StaffRegistryController(
 
     private void HandleInvalidChoice()
     {
-        view.PrintInvalidMenuChoise();
+        view.PrintInvalidMenuChoice();
     }
 
     private void HandleExit()
@@ -83,7 +78,7 @@ public class StaffRegistryController(
         }
     }
 
-    private void HandleAddStaffSucess (object? sender, StaffRegistryEvent e)
+    private void HandleAddStaffSucess (object? sender, StaffRegistryEventArgs e)
     {
         if (e.Status == RepositoryResult.ADD_STAFF_OK)
         {
@@ -91,7 +86,7 @@ public class StaffRegistryController(
         }
     }
 
-    private void HandleAddStaffFailure(object? sender, StaffRegistryEvent e)
+    private void HandleAddStaffFailure(object? sender, StaffRegistryEventArgs e)
     {
         if (e.Status == RepositoryResult.ADD_STAFF_FAILURE)
         {

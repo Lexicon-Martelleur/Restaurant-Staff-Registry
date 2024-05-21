@@ -29,9 +29,9 @@ public class StaffRegistryView
 
     Staff registry menu
     ===================
-        1) Add staff entry
-        2) List all staff entries
-        Q) Exit staff registry
+        (1) Add staff entry
+        (2) List all staff entries
+        (Q) Exit staff registry
     """);
         Console.Write("Select menu item: ");
         var selectedMenu = Console.ReadLine();
@@ -49,7 +49,7 @@ public class StaffRegistryView
 
     public (string fname, string lname, double salary) GetStaffInput ()
     {
-        Console.Write("\nEnter new staff (Firstname Lastname Salary$): ");
+        Console.Write("\nEnter new staff (FirstName LastName Salary$): ");
         string newStaffInput = Console.ReadLine() ?? "";
         string[] newStaff = newStaffInput.Split(' ', StringSplitOptions.RemoveEmptyEntries);
 
@@ -65,7 +65,7 @@ public class StaffRegistryView
         Console.WriteLine("\n🍕🍕🍕 Goodbye 🍕🍕🍕");
     }
 
-    public void PrintInvalidMenuChoise()
+    public void PrintInvalidMenuChoice()
     {
         Console.WriteLine("\n⚠️ Not valid selection");
     }

@@ -1,5 +1,4 @@
-﻿// See https://aka.ms/new-console-template for more information
-using Retaurant_Staff_Registry.controller;
+﻿using Retaurant_Staff_Registry.controller;
 using Retaurant_Staff_Registry.model;
 using Retaurant_Staff_Registry.view;
 

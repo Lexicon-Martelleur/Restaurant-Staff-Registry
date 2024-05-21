@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Retaurant_Staff_Registry.events;
 
-public class StaffRegistryEvent(
+public class StaffRegistryEventArgs(
     RepositoryResult status,
     string msg,
     (string fname, string lname, double salary) data

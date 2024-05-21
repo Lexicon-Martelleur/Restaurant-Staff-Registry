@@ -1,12 +1,6 @@
 ﻿using Retaurant_Staff_Registry.constant;
 using Retaurant_Staff_Registry.events;
 using Retaurant_Staff_Registry.model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static Restaurant_Staff_Registry.model.StaffTest;
 
 namespace Restaurant_Staff_Registry.model;
 
@@ -14,8 +8,8 @@ public class StaffTest
 {
     public class Fixture
     {
-        public StaffRegistryService StaffRegistryService { get; private set; }
-        public Mock<IStaffRepository> MockRepository { get; private set; }
+        public StaffRegistryService StaffRegistryService { get; private init; }
+        public Mock<IStaffRepository> MockRepository { get; private init; }
 
         public Fixture()
         {
@@ -24,28 +18,19 @@ public class StaffTest
         }
     }
 
-    public class AddStaffSuccessCase : IClassFixture<Fixture>, IDisposable
+    public class AddStaffSuccessCase(Fixture fixture) : IClassFixture<Fixture>, IDisposable
     {
-        private readonly Fixture f;
-        private readonly List<EventHandler<StaffRegistryEvent>> eventHandlers = [];
-
-        public AddStaffSuccessCase(Fixture fixture)
-        {
-            f = fixture;
-        }
-
-        public static IEnumerable<object[]> TestData()
-        {
-            yield return new object[]
-            {
-                new List<(string fname, string lname, double salary)>
-                {
-                    ("Eric", "Larsson", 2366),
-                    ("Lisa", "Ericsson", 336),
-                    ("Anna", "Jonsson", 4366)
+        private readonly Fixture _f = fixture;
+        private readonly List<EventHandler<StaffRegistryEventArgs>> eventHandlers = [];
+        public static IEnumerable<object[]> TestData = [
+            [
+                new List<(string fname, string lname, double salary)> {
+                    ("Eric", "Larson", 2366),
+                    ("Lisa", "Erikson", 336),
+                    ("Anna", "Jonson", 4366)
                 }
-            };
-        }
+            ],
+        ];
 
         [Theory(DisplayName = "Call add staff to repository if valid staff data")]
         [MemberData(nameof(TestData))]
@@ -53,16 +38,16 @@ public class StaffTest
         {
             foreach ((string fname, string lname, double salary) in staffDataItems)
             {
-                f.StaffRegistryService.AddStaff((fname, lname, salary));
+                _f.StaffRegistryService.AddStaff((fname, lname, salary));
             }
 
-            f.MockRepository.Verify(repository =>
+            _f.MockRepository.Verify(repository =>
                 repository.AddStaff(It.IsAny<Staff>()),
                 Times.Exactly(staffDataItems.Count)
             );
         }
 
-        [Theory(DisplayName = "Raise ok event if valid staff data")]
+        [Theory(DisplayName = "Raise OK event if valid staff data")]
         [MemberData(nameof(TestData))]
         public void T2(List<(string fname, string lname, double salary)> staffDataItems)
         {
@@ -71,15 +56,15 @@ public class StaffTest
 
             foreach ((string fname, string lname, double salary) in staffDataItems)
             {
-                EventHandler<StaffRegistryEvent> handler = (sender, e) =>
+                EventHandler<StaffRegistryEventArgs> handler = (sender, e) =>
                 {
                     isRaised = true;
                     result = e.Status;
                 };
 
                 eventHandlers.Add(handler);
-                f.StaffRegistryService.StaffRegistryEventHandler += handler;
-                f.StaffRegistryService.AddStaff((fname, lname, salary));
+                _f.StaffRegistryService.StaffRegistryEventHandler += handler;
+                _f.StaffRegistryService.AddStaff((fname, lname, salary));
                 Assert.True(isRaised);
                 Assert.Equal(RepositoryResult.ADD_STAFF_OK, result);
             }
@@ -87,25 +72,25 @@ public class StaffTest
 
         public void Dispose()
         {
-            foreach (EventHandler<StaffRegistryEvent> handler in eventHandlers)
+            foreach (EventHandler<StaffRegistryEventArgs> handler in eventHandlers)
             {
-                f.StaffRegistryService.StaffRegistryEventHandler -= handler;
+                _f.StaffRegistryService.StaffRegistryEventHandler -= handler;
             }
-            f.MockRepository.Reset();
+            _f.MockRepository.Reset();
         }
     }
 
     public class AddStaffFailureCase(Fixture f) : IClassFixture<Fixture>, IDisposable
     {
-        private readonly Fixture f = f;
-        private readonly List<EventHandler<StaffRegistryEvent>> eventHandlers = [];
+        private readonly Fixture _f = f;
+        private readonly List<EventHandler<StaffRegistryEventArgs>> eventHandlers = [];
 
         public static IEnumerable<object[]> TestData = [
             [
                 new List<(string fname, string lname, double salary)> {
                     ("Eric", "", 2366),
-                    ("", "Ericsson", 336),
-                    ("Anna", "Jonsson", -4366)
+                    ("", "Erikson", 336),
+                    ("Anna", "Jonson", -4366)
                 }
             ],
         ];
@@ -116,10 +101,10 @@ public class StaffTest
         {
             foreach ((string fname, string lname, double salary) in staffDataItems)
             {
-                f.StaffRegistryService.AddStaff((fname, lname, salary));
+                _f.StaffRegistryService.AddStaff((fname, lname, salary));
             }
 
-            f.MockRepository.Verify(repository =>
+            _f.MockRepository.Verify(repository =>
                 repository.AddStaff(It.IsAny<Staff>()),
                 Times.Never()
             );
@@ -134,15 +119,15 @@ public class StaffTest
 
             foreach ((string fname, string lname, double salary) in staffDataItems)
             {
-                EventHandler<StaffRegistryEvent> handler = (sender, e) =>
+                EventHandler<StaffRegistryEventArgs> handler = (sender, e) =>
                 {
                     isRaised = true;
                     result = e.Status;
                 };
 
                 eventHandlers.Add(handler);
-                f.StaffRegistryService.StaffRegistryEventHandler += handler;
-                f.StaffRegistryService.AddStaff((fname, lname, salary));
+                _f.StaffRegistryService.StaffRegistryEventHandler += handler;
+                _f.StaffRegistryService.AddStaff((fname, lname, salary));
                 Assert.True(isRaised);
                 Assert.Equal(RepositoryResult.ADD_STAFF_FAILURE, result);
             }
@@ -150,11 +135,11 @@ public class StaffTest
 
         public void Dispose()
         {
-            foreach (EventHandler<StaffRegistryEvent> handler in eventHandlers)
+            foreach (EventHandler<StaffRegistryEventArgs> handler in eventHandlers)
             {
-                f.StaffRegistryService.StaffRegistryEventHandler -= handler;
+                _f.StaffRegistryService.StaffRegistryEventHandler -= handler;
             }
-            f.MockRepository.Reset();
+            _f.MockRepository.Reset();
         }
     }
 }

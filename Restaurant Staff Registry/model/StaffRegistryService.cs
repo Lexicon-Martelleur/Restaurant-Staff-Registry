@@ -14,7 +14,7 @@ public class StaffRegistryService(IStaffRepository repository)
 {
     private readonly HashSet<int> _staffIDs = [];
 
-    public EventHandler<StaffRegistryEvent>? StaffRegistryEventHandler;
+    public EventHandler<StaffRegistryEventArgs>? StaffRegistryEventHandler;
     public void AddStaff((string fname, string lname, double salary) staffItems)
     {
         try {
@@ -50,9 +50,9 @@ public class StaffRegistryService(IStaffRepository repository)
 
     private void OnAddStaffOk((string fname, string lname, double salary) staffItems)
     {
-        StaffRegistryEventHandler?.Invoke(this, new StaffRegistryEvent(
+        StaffRegistryEventHandler?.Invoke(this, new StaffRegistryEventArgs(
             RepositoryResult.ADD_STAFF_OK,
-            "Staff registred ok",
+            "Staff registered OK",
             staffItems
         ));
     }
@@ -61,7 +61,7 @@ public class StaffRegistryService(IStaffRepository repository)
         (string fname, string lname, double salary) staffItems,
         string msg)
     {
-        StaffRegistryEventHandler?.Invoke(this, new StaffRegistryEvent(
+        StaffRegistryEventHandler?.Invoke(this, new StaffRegistryEventArgs(
             RepositoryResult.ADD_STAFF_FAILURE,
             msg,
             staffItems
