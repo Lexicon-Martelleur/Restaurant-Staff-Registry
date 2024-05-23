@@ -8,4 +8,15 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Restaurant.EntityModels\Restaurant.EntityModels.csproj" />
+    <ProjectReference Include="..\Restaurant.Sqlite3\Restaurant.Sqlite3.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="resources\restaurant.db">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

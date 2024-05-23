@@ -1,0 +1,10 @@
+﻿-- create_staff_database.sql
+CREATE TABLE Staff (
+
+    Id INTEGER PRIMARY KEY,
+    FirstName TEXT NOT NULL,
+    LastName TEXT NOT NULL,
+    Position TEXT NOT NULL,
+    Department TEXT NOT NULL,
+    DateOfBirth TEXT NOT NULL
+);

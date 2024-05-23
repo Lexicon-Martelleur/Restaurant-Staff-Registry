@@ -1,12 +1,6 @@
 ﻿
 using Retaurant_Staff_Registry.constant;
 using Retaurant_Staff_Registry.events;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Retaurant_Staff_Registry.model;
 
@@ -25,14 +19,17 @@ public class StaffRegistryService(IStaffRepository repository)
                 staffItems.salary,
                 GetStaffID());
             repository.AddStaff(staff);
+            Console.WriteLine($"staffItems {staffItems}");
             OnAddStaffOk(staffItems);
+            Console.WriteLine($"staffItems {staffItems}");
         }
         catch (ArgumentOutOfRangeException ex)
         {
             OnAddStaffFailure(staffItems, ex.Message);
         }
-        catch
+        catch (Exception ex)
         {
+            Console.WriteLine($"Ex {ex.StackTrace}");
             OnAddStaffFailure(staffItems, "Invalid property value");
         }
     }

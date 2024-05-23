@@ -73,7 +73,7 @@ public class StaffRegistryController(
             var staffItems = view.ReadNewStaffInput();
             service.AddStaff(staffItems);
         }
-        catch (Exception)
+        catch (Exception ex)
         {
             view.PrintStaffAddedUnsuccessfully();
         }

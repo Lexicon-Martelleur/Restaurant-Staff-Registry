@@ -1,12 +1,5 @@
 ﻿using Retaurant_Staff_Registry.constant;
 using Retaurant_Staff_Registry.model;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace Retaurant_Staff_Registry.view;
 
@@ -111,7 +104,7 @@ public class StaffRegistryView
         foreach (var staff in staffEntries)
         {
             Console.WriteLine($"""
-                🚀 {staff.Fname} {staff.Lname}, salary {staff.Salary}$ 
+                🚀 {staff.FName} {staff.LName}, salary {staff.Salary}$ 
             """);
         }
         Console.WriteLine("");

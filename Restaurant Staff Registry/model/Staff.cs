@@ -6,46 +6,46 @@ public class Staff
     public static readonly int MAX_SALARY = 9999999;
     public static readonly int MIN_NAME_SIZE = 1;
     public static readonly int MAX_NAME_SIZE = 100;
-    private string _fname = "Anonymous";
-    private string _lname = "Anonymous";
+    private string _fName = "Anonymous";
+    private string _lName = "Anonymous";
     private double _salary = MIN_SALARY;
 
-    public Staff(string fname, string lname, double salary, int staffID)
+    public Staff(string fName, string lName, double salary, int staffID)
     {
-        Fname = fname;
-        Lname = lname;
+        FName = fName;
+        LName = lName;
         Salary = salary;
         StaffID = staffID;
     }
 
-    public string Fname {
-        get => _fname;
+    public string FName {
+        get => _fName;
         init
         {
             if (value.Length >= MIN_NAME_SIZE &&
                 value.Length <= Staff.MAX_NAME_SIZE)
             {
-                _fname = value;
+                _fName = value;
             }
             else
             {
-                throw new ArgumentOutOfRangeException(nameof(Fname), "Invalid name range");
+                throw new ArgumentOutOfRangeException(nameof(FName), "Invalid name range");
             }
         }
     }
 
-    public string Lname {
-        get => _lname;
+    public string LName {
+        get => _lName;
         init
         {
             if (value.Length >= MIN_NAME_SIZE &&
                 value.Length <= Staff.MAX_NAME_SIZE)
             {
-                _lname = value;
+                _lName = value;
             }
             else
             {
-                throw new ArgumentOutOfRangeException(nameof(Lname), "Invalid name range");
+                throw new ArgumentOutOfRangeException(nameof(LName), "Invalid name range");
             }
         }
     }

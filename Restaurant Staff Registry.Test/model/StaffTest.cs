@@ -7,9 +7,9 @@ public class StaffTest
     public class StaffConstructor()
     {
         public static IEnumerable<object[]> ValidTestData = [
-            ["Eric", "Larsson", 236666.3, 1],
-            ["Lisa", "Ericsson", 336666.3, 2],
-            ["Anna", "Jonsson", 436666.3, 3],
+            ["Eric", "Larson", 236666.3, 1],
+            ["Lisa", "Erikson", 336666.3, 2],
+            ["Anna", "Jonson", 436666.3, 3],
         ];
 
         [Theory(DisplayName = "Create a valid staff entry")]
@@ -17,16 +17,16 @@ public class StaffTest
         public void T1(string fname, string lname, double salary, int staffID)
         {
             Staff staff = new(fname, lname, salary, staffID);
-            Assert.Equal(staff.Fname, fname);
-            Assert.Equal(staff.Lname, lname);
+            Assert.Equal(staff.FName, fname);
+            Assert.Equal(staff.LName, lname);
             Assert.Equal(staff.Salary, salary);
             Assert.Equal(staff.StaffID, staffID);
         }
 
         public static IEnumerable<object[]> InvalidTestData = [
-            ["Eric", "Larsson", -236666.3, 1],
+            ["Eric", "Larson", -236666.3, 1],
             ["Lisa", "", -336666.3, 2],
-            ["", "Jonsson", -436666.3, 3],
+            ["", "Jonson", -436666.3, 3],
         ];
 
         [Theory(DisplayName = "Do not create a staff entry")]

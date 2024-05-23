@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Retaurant_Staff_Registry.model;
 
-namespace Retaurant_Staff_Registry.model;
+namespace Retaurant_Staff_Registry.Restaurant_Staff_Registry;
 
-internal class StaffRepository : IStaffRepository
+public class RestaurantMemoryStorage : IStaffRepository
 {
     private readonly List<Staff> _staffEntries = [];
-    
+
     public void AddStaff(Staff staff)
     {
         _staffEntries.Add(staff);
@@ -20,3 +21,4 @@ internal class StaffRepository : IStaffRepository
         return _staffEntries.AsReadOnly();
     }
 }
+
