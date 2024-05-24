@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <RootNamespace>Retaurant_Staff_Registry</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\StaffRegistry.EntityModels\StaffRegistry.EntityModels.csproj" />
+    <ProjectReference Include="..\StaffRegistry.Sqlite3\StaffRegistry.Sqlite3.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="resources\restaurant.db">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>
