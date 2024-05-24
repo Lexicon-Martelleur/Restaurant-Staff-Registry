@@ -1,5 +1,6 @@
 ﻿namespace StaffRegistry.model;
 
+[Serializable]
 public class StaffEntity
 {
     public const int MIN_SALARY = 1;
@@ -22,7 +23,7 @@ public class StaffEntity
 
     public string FName {
         get => _fName;
-        init
+        set
         {
             if (value.Length >= MIN_NAME_SIZE &&
                 value.Length <= StaffEntity.MAX_NAME_SIZE)
@@ -38,7 +39,7 @@ public class StaffEntity
 
     public string LName {
         get => _lName;
-        init
+        set
         {
             if (value.Length >= MIN_NAME_SIZE &&
                 value.Length <= StaffEntity.MAX_NAME_SIZE)
@@ -55,7 +56,7 @@ public class StaffEntity
     public double Salary
     {
         get => _salary;
-        init
+        set
         {
             if (value >= MIN_SALARY &&
                 value <= StaffEntity.MAX_SALARY)
@@ -69,9 +70,12 @@ public class StaffEntity
         }
     }
 
-    public long DateOfBirth { get; init; }
+    public long DateOfBirth { get; set; }
 
-    public int StaffID { get; init; }
+    public int StaffID { get; set; }
+
+    // Parameterless constructor required for XML serialization
+    public StaffEntity() { }
 
     public StaffEntity(
         string fName,

@@ -1,5 +1,4 @@
-﻿
-using StaffRegistry.constant;
+﻿using StaffRegistry.constant;
 using StaffRegistry.events;
 using StaffRegistry.utility;
 
@@ -19,19 +18,17 @@ public class StaffRegistryService(IStaffRepository repository)
                 staffData.LName,
                 staffData.Salary,
                 DateUtility.ConvertDateStringToTimeStamp(staffData.DateOfBirth),
-                IDUtility.GetInMemoryUniqueID());
+                IDUtility.GetInMemoryUniqueID()
+            );
             repository.AddStaff(staff);
-            Console.WriteLine($"staffItems {staffData}");
             OnAddStaffOk(staffData);
-            Console.WriteLine($"staffItems {staffData}");
         }
         catch (ArgumentOutOfRangeException ex)
         {
             OnAddStaffFailure(staffData, ex.Message);
         }
-        catch (Exception ex)
+        catch
         {
-            Console.WriteLine($"Ex {ex.StackTrace}");
             OnAddStaffFailure(staffData, "Invalid property value");
         }
     }

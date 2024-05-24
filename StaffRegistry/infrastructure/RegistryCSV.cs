@@ -1,4 +1,5 @@
 ﻿using StaffRegistry.model;
+using StaffRegistry.utility;
 
 namespace StaffRegistry.infrastructure;
 
@@ -9,8 +10,10 @@ public class RegistryCSV : IStaffRepository
     public void AddStaff(StaffEntity staff)
     {
         bool append = true;
-        using StreamWriter writer = new StreamWriter(CreateFileIfNotExit(), append);
-        var line = $"{staff.FName}," +
+        using StreamWriter writer = new StreamWriter(
+            FileUtility.CreateFileIfNotExit(csvFile, csvDir),
+            append);
+        string line = $"{staff.FName}," +
             $"{staff.LName}," +
             $"{staff.Salary}," +
             $"{staff.DateOfBirth}," +
@@ -18,43 +21,12 @@ public class RegistryCSV : IStaffRepository
         writer.WriteLine(line);
     }
 
-    private string CreateFileIfNotExit()
-    {
-        try {
-            CreateDirIfNotExit();
-            string absolutePath = Path.Combine(
-                Environment.CurrentDirectory,
-                csvDir,
-                csvFile);
-
-            if (!File.Exists(absolutePath))
-            {
-                using (File.Create(absolutePath)) { }
-            }
-            return absolutePath;
-        } catch
-        {
-            throw new Exception("Could not create a valid csv file");
-        }
-    }
-
-    private void CreateDirIfNotExit()
-    {
-        string absolutePath = Path.Combine(
-            Environment.CurrentDirectory,
-            csvDir);
-
-        if (!Path.Exists(absolutePath))
-        {
-            Directory.CreateDirectory(absolutePath);
-        }
-    }
-
     public IReadOnlyList<StaffEntity> GetAllStaffEntries()
     {
         List<StaffEntity> staffEntries = [];
 
-        using (var reader = new StreamReader(CreateFileIfNotExit()))
+        using (var reader = new StreamReader(
+            FileUtility.CreateFileIfNotExit(csvFile, csvDir)))
         {
             string? line;
             while ((line = reader.ReadLine()) != null)

@@ -30,4 +30,20 @@ internal class StaffRegistryFactory
         StaffRegistryView view = new();
         return new(service, view);
     }
+
+    internal StaffRegistryController CreateJSONRegistry()
+    {
+        RegistryJSON storage = new();
+        StaffRegistryService service = new(storage);
+        StaffRegistryView view = new();
+        return new(service, view);
+    }
+
+    internal StaffRegistryController CreateXMLRegistry()
+    {
+        RegistryXML storage = new();
+        StaffRegistryService service = new(storage);
+        StaffRegistryView view = new();
+        return new(service, view);
+    }
 }

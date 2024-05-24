@@ -364,3 +364,13 @@ FodyWeavers.xsd
 
 # Database SQLite3
 restaurant.db
+
+# CSV
+restaurant.csv
+StaffRegistry\resources\restaurant.csv
+
+# JSON
+restaurant.json
+
+# XML
+restaurant.xml
