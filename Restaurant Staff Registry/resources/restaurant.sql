@@ -6,5 +6,6 @@ CREATE TABLE Staff (
     LastName TEXT NOT NULL,
     Position TEXT NOT NULL,
     Department TEXT NOT NULL,
-    DateOfBirth TEXT NOT NULL
+    Salary REAL NOT NULL,
+    DateOfBirth INTEGER NOT NULL
 );

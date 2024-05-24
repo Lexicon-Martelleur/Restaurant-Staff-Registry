@@ -1,29 +1,31 @@
 ﻿namespace Retaurant_Staff_Registry.model;
 
-public class Staff
+public class StaffEntity
 {
-    public static readonly int MIN_SALARY = 1;
-    public static readonly int MAX_SALARY = 9999999;
-    public static readonly int MIN_NAME_SIZE = 1;
-    public static readonly int MAX_NAME_SIZE = 100;
-    private string _fName = "Anonymous";
-    private string _lName = "Anonymous";
-    private double _salary = MIN_SALARY;
+    public const int MIN_SALARY = 1;
+    
+    public const int MAX_SALARY = 9999999;
+    
+    public const int MIN_NAME_SIZE = 1;
+    
+    public const int MAX_NAME_SIZE = 100;
 
-    public Staff(string fName, string lName, double salary, int staffID)
-    {
-        FName = fName;
-        LName = lName;
-        Salary = salary;
-        StaffID = staffID;
-    }
+    public const string Position = "System Development";
+
+    public const string Department = "IT";
+    
+    private string _fName = "Anonymous";
+    
+    private string _lName = "Anonymous";
+    
+    private double _salary = MIN_SALARY;
 
     public string FName {
         get => _fName;
         init
         {
             if (value.Length >= MIN_NAME_SIZE &&
-                value.Length <= Staff.MAX_NAME_SIZE)
+                value.Length <= StaffEntity.MAX_NAME_SIZE)
             {
                 _fName = value;
             }
@@ -39,7 +41,7 @@ public class Staff
         init
         {
             if (value.Length >= MIN_NAME_SIZE &&
-                value.Length <= Staff.MAX_NAME_SIZE)
+                value.Length <= StaffEntity.MAX_NAME_SIZE)
             {
                 _lName = value;
             }
@@ -56,7 +58,7 @@ public class Staff
         init
         {
             if (value >= MIN_SALARY &&
-                value <= Staff.MAX_SALARY)
+                value <= StaffEntity.MAX_SALARY)
             {
                 _salary = value;
             }
@@ -67,5 +69,21 @@ public class Staff
         }
     }
 
+    public long DateOfBirth { get; init; }
+
     public int StaffID { get; init; }
+
+    public StaffEntity(
+        string fName,
+        string lName,
+        double salary,
+        long dateOfBirth,
+        int staffID)
+    {
+        FName = fName;
+        LName = lName;
+        Salary = salary;
+        DateOfBirth = dateOfBirth;
+        StaffID = staffID;
+    }
 }

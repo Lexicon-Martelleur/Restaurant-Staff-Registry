@@ -62,7 +62,7 @@ public class StaffRegistryController(
 
     private void HandleSelectAllStaffEntries()
     {
-        IReadOnlyList<Staff> staffEntries = service.GetAllStaffEntries();
+        IReadOnlyList<StaffEntity> staffEntries = service.GetAllStaffEntries();
         view.PrintAllStaffEntries(staffEntries);
     }
 
@@ -70,10 +70,10 @@ public class StaffRegistryController(
     {
         try
         {
-            var staffItems = view.ReadNewStaffInput();
-            service.AddStaff(staffItems);
+            var staffData = view.ReadNewStaffInput();
+            service.AddStaff(staffData);
         }
-        catch (Exception ex)
+        catch
         {
             view.PrintStaffAddedUnsuccessfully();
         }

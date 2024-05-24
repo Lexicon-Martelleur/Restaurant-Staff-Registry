@@ -24,37 +24,37 @@ public class StaffTest
         private readonly List<EventHandler<StaffRegistryEventArgs>> eventHandlers = [];
         public static IEnumerable<object[]> TestData = [
             [
-                new List<(string fname, string lname, double salary)> {
-                    ("Eric", "Larson", 2366),
-                    ("Lisa", "Erikson", 336),
-                    ("Anna", "Jonson", 4366)
+                new List<StaffVO> {
+                    new("Eric", "Larson", 2366, "1999-01-01"),
+                    new("Lisa", "Erikson", 336, "1999-01-01"),
+                    new("Anna", "Jonson", 4366, "1999-01-01")
                 }
             ],
         ];
 
         [Theory(DisplayName = "Call add staff to repository if valid staff data")]
         [MemberData(nameof(TestData))]
-        public void T1(List<(string fname, string lname, double salary)> staffDataItems)
+        public void T1(List<StaffVO> staffDataItems)
         {
-            foreach ((string fname, string lname, double salary) in staffDataItems)
+            foreach (StaffVO staffData in staffDataItems)
             {
-                _f.StaffRegistryService.AddStaff((fname, lname, salary));
+                _f.StaffRegistryService.AddStaff(staffData);
             }
 
             _f.MockRepository.Verify(repository =>
-                repository.AddStaff(It.IsAny<Staff>()),
+                repository.AddStaff(It.IsAny<StaffEntity>()),
                 Times.Exactly(staffDataItems.Count)
             );
         }
 
         [Theory(DisplayName = "Raise OK event if valid staff data")]
         [MemberData(nameof(TestData))]
-        public void T2(List<(string fname, string lname, double salary)> staffDataItems)
+        public void T2(List<StaffVO> staffDataItems)
         {
             bool isRaised = false;
             RepositoryResult result = RepositoryResult.ADD_STAFF_FAILURE;
 
-            foreach ((string fname, string lname, double salary) in staffDataItems)
+            foreach (StaffVO staffData in staffDataItems)
             {
                 EventHandler<StaffRegistryEventArgs> handler = (sender, e) =>
                 {
@@ -64,7 +64,7 @@ public class StaffTest
 
                 eventHandlers.Add(handler);
                 _f.StaffRegistryService.StaffRegistryEventHandler += handler;
-                _f.StaffRegistryService.AddStaff((fname, lname, salary));
+                _f.StaffRegistryService.AddStaff(staffData);
                 Assert.True(isRaised);
                 Assert.Equal(RepositoryResult.ADD_STAFF_OK, result);
             }
@@ -87,37 +87,37 @@ public class StaffTest
 
         public static IEnumerable<object[]> TestData = [
             [
-                new List<(string fname, string lname, double salary)> {
-                    ("Eric", "", 2366),
-                    ("", "Erikson", 336),
-                    ("Anna", "Jonson", -4366)
+                new List<StaffVO> {
+                    new("Eric", "", 2366, "1999-01-01"),
+                    new("", "Erikson", 336, "1999-01-01"),
+                    new("Anna", "Jonson", -4366, "1999-01-01")
                 }
             ],
         ];
 
         [Theory(DisplayName = "Not call add staff to repository if invalid staff data")]
         [MemberData(nameof(TestData))]
-        public void T1(List<(string fname, string lname, double salary)> staffDataItems)
+        public void T1(List<StaffVO> staffDataItems)
         {
-            foreach ((string fname, string lname, double salary) in staffDataItems)
+            foreach (StaffVO staffData in staffDataItems)
             {
-                _f.StaffRegistryService.AddStaff((fname, lname, salary));
+                _f.StaffRegistryService.AddStaff(staffData);
             }
 
             _f.MockRepository.Verify(repository =>
-                repository.AddStaff(It.IsAny<Staff>()),
+                repository.AddStaff(It.IsAny<StaffEntity>()),
                 Times.Never()
             );
         }
 
         [Theory(DisplayName = "Raise failure event if invalid staff data")]
         [MemberData(nameof(TestData))]
-        public void T2(List<(string fname, string lname, double salary)> staffDataItems)
+        public void T2(List<StaffVO> staffDataItems)
         {
             bool isRaised = false;
             RepositoryResult result = RepositoryResult.ADD_STAFF_OK;
 
-            foreach ((string fname, string lname, double salary) in staffDataItems)
+            foreach (StaffVO staffData in staffDataItems)
             {
                 EventHandler<StaffRegistryEventArgs> handler = (sender, e) =>
                 {
@@ -127,7 +127,7 @@ public class StaffTest
 
                 eventHandlers.Add(handler);
                 _f.StaffRegistryService.StaffRegistryEventHandler += handler;
-                _f.StaffRegistryService.AddStaff((fname, lname, salary));
+                _f.StaffRegistryService.AddStaff(staffData);
                 Assert.True(isRaised);
                 Assert.Equal(RepositoryResult.ADD_STAFF_FAILURE, result);
             }

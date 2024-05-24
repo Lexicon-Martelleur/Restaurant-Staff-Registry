@@ -1,6 +1,7 @@
 ﻿
 using Retaurant_Staff_Registry.constant;
 using Retaurant_Staff_Registry.events;
+using Retaurant_Staff_Registry.utility;
 
 namespace Retaurant_Staff_Registry.model;
 
@@ -9,28 +10,29 @@ public class StaffRegistryService(IStaffRepository repository)
     private readonly HashSet<int> _staffIDs = [];
 
     public EventHandler<StaffRegistryEventArgs>? StaffRegistryEventHandler;
-    public void AddStaff((string fname, string lname, double salary) staffItems)
+    public void AddStaff(StaffVO staffData)
     {
         try {
-            Console.WriteLine($"staffItems {staffItems}");
-            Staff staff = new(
-                staffItems.fname,
-                staffItems.lname,
-                staffItems.salary,
+            Console.WriteLine($"staffItems {staffData}");
+            StaffEntity staff = new(
+                staffData.FName,
+                staffData.LName,
+                staffData.Salary,
+                DateUtility.ConvertDateStringToTimeStamp(staffData.DateOfBirth),
                 GetStaffID());
             repository.AddStaff(staff);
-            Console.WriteLine($"staffItems {staffItems}");
-            OnAddStaffOk(staffItems);
-            Console.WriteLine($"staffItems {staffItems}");
+            Console.WriteLine($"staffItems {staffData}");
+            OnAddStaffOk(staffData);
+            Console.WriteLine($"staffItems {staffData}");
         }
         catch (ArgumentOutOfRangeException ex)
         {
-            OnAddStaffFailure(staffItems, ex.Message);
+            OnAddStaffFailure(staffData, ex.Message);
         }
         catch (Exception ex)
         {
             Console.WriteLine($"Ex {ex.StackTrace}");
-            OnAddStaffFailure(staffItems, "Invalid property value");
+            OnAddStaffFailure(staffData, "Invalid property value");
         }
     }
 
@@ -45,27 +47,27 @@ public class StaffRegistryService(IStaffRepository repository)
         return id;
     }
 
-    private void OnAddStaffOk((string fname, string lname, double salary) staffItems)
+    private void OnAddStaffOk(StaffVO staffData)
     {
         StaffRegistryEventHandler?.Invoke(this, new StaffRegistryEventArgs(
             RepositoryResult.ADD_STAFF_OK,
             "Staff registered OK",
-            staffItems
+            staffData
         ));
     }
 
     private void OnAddStaffFailure(
-        (string fname, string lname, double salary) staffItems,
+        StaffVO staffData,
         string msg)
     {
         StaffRegistryEventHandler?.Invoke(this, new StaffRegistryEventArgs(
             RepositoryResult.ADD_STAFF_FAILURE,
             msg,
-            staffItems
+            staffData
         ));
     }
 
-    public IReadOnlyList<Staff> GetAllStaffEntries()
+    public IReadOnlyList<StaffEntity> GetAllStaffEntries()
     {
         return repository.GetAllStaffEntries(); 
     }

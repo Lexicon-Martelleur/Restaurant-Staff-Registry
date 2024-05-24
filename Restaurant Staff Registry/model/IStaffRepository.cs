@@ -8,7 +8,7 @@ namespace Retaurant_Staff_Registry.model;
 
 public interface IStaffRepository
 {
-    public void AddStaff(Staff staff);
+    public void AddStaff(StaffEntity staff);
 
-    public IReadOnlyList<Staff> GetAllStaffEntries();
+    public IReadOnlyList<StaffEntity> GetAllStaffEntries();
 }

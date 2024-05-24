@@ -8,7 +8,7 @@ namespace Retaurant_Staff_Registry.Restaurant_Staff_Registry;
 
 internal class RestaurantSqliteStorage : Model.IStaffRepository
 {
-    public void AddStaff(Model.Staff staff)
+    public void AddStaff(Model.StaffEntity staff)
     {
         using RestaurantDB db = new();
 
@@ -16,9 +16,10 @@ internal class RestaurantSqliteStorage : Model.IStaffRepository
         {
             FirstName = staff.FName,
             LastName = staff.LName,
-            Position = "System Developer",
-            Department = "IT",
-            DateOfBirth = "?????"
+            Position = Model.StaffEntity.Position,
+            Department = Model.StaffEntity.Department,
+            DateOfBirth = staff.DateOfBirth,
+            Salary = staff.Salary,
         };
 
         AddStaffToDBChangeTracking(db, staffEnityModel);
@@ -41,7 +42,7 @@ internal class RestaurantSqliteStorage : Model.IStaffRepository
         Console.WriteLine($"affected {affected}");
     }
 
-    public IReadOnlyList<Model.Staff> GetAllStaffEntries()
+    public IReadOnlyList<Model.StaffEntity> GetAllStaffEntries()
     {
         using RestaurantDB db = new();
 
@@ -51,7 +52,7 @@ internal class RestaurantSqliteStorage : Model.IStaffRepository
         return ConvertDBStaffResultToImmutableList(staff);
     }
 
-    private IReadOnlyList<Model.Staff> ConvertDBStaffResultToImmutableList(
+    private IReadOnlyList<Model.StaffEntity> ConvertDBStaffResultToImmutableList(
         IQueryable<DB.Staff>? staff)
     {
         if (staff is null || !staff.Any())
@@ -59,14 +60,13 @@ internal class RestaurantSqliteStorage : Model.IStaffRepository
             return [];
         }
 
-        int mockSalary = 111;
-
         return staff
             .OrderByDescending(staff => staff.FirstName)
-            .Select(staff => new Model.Staff(
+            .Select(staff => new Model.StaffEntity(
                 staff.FirstName,
                 staff.LastName,
-                mockSalary,
+                staff.Salary,
+                staff.DateOfBirth,
                 staff.Id
             ))
             .ToList()

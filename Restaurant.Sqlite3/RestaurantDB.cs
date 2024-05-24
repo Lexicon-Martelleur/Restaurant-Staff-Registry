@@ -40,15 +40,6 @@ public class RestaurantDB : DbContext
         builder.Entity<Staff>()
           .Property(staff => staff.Position)
           .IsRequired()
-          .HasMaxLength(15);
-
-        //// Some SQLite-specific configuration.
-        //if (Database.ProviderName?.Contains("Sqlite") ?? false)
-        //{
-        //     To add the lack of decimal support in SQLite.
-        //    builder.Entity<Staff>()
-        //      .Property(staff => staff.Salary)
-        //      .HasConversion<double>();
-        //}
+          .HasMaxLength(30);
     }
 }

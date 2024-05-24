@@ -9,14 +9,14 @@ namespace Retaurant_Staff_Registry.Restaurant_Staff_Registry;
 
 public class RestaurantMemoryStorage : IStaffRepository
 {
-    private readonly List<Staff> _staffEntries = [];
+    private readonly List<StaffEntity> _staffEntries = [];
 
-    public void AddStaff(Staff staff)
+    public void AddStaff(StaffEntity staff)
     {
         _staffEntries.Add(staff);
     }
 
-    public IReadOnlyList<Staff> GetAllStaffEntries()
+    public IReadOnlyList<StaffEntity> GetAllStaffEntries()
     {
         return _staffEntries.AsReadOnly();
     }
