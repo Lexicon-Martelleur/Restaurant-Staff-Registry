@@ -7,7 +7,7 @@ namespace Retaurant_Staff_Registry.model;
 
 public class StaffRegistryService(IStaffRepository repository)
 {
-    private readonly HashSet<int> _staffIDs = [];
+    
 
     public EventHandler<StaffRegistryEventArgs>? StaffRegistryEventHandler;
     public void AddStaff(StaffVO staffData)
@@ -19,7 +19,7 @@ public class StaffRegistryService(IStaffRepository repository)
                 staffData.LName,
                 staffData.Salary,
                 DateUtility.ConvertDateStringToTimeStamp(staffData.DateOfBirth),
-                GetStaffID());
+                IDUtility.GetInMemoryUniqueID());
             repository.AddStaff(staff);
             Console.WriteLine($"staffItems {staffData}");
             OnAddStaffOk(staffData);
@@ -34,17 +34,6 @@ public class StaffRegistryService(IStaffRepository repository)
             Console.WriteLine($"Ex {ex.StackTrace}");
             OnAddStaffFailure(staffData, "Invalid property value");
         }
-    }
-
-    private int GetStaffID()
-    {
-        Random random = new();
-        int id;
-        do
-        {
-            id = random.Next(1, int.MaxValue);
-        } while (!_staffIDs.Add(id));
-        return id;
     }
 
     private void OnAddStaffOk(StaffVO staffData)

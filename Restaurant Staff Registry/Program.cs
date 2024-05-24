@@ -1,12 +1,7 @@
-﻿using Restaurant.Sqlite3;
-using Retaurant_Staff_Registry.controller;
-using Retaurant_Staff_Registry.model;
-using Retaurant_Staff_Registry.Restaurant_Staff_Registry;
-using Retaurant_Staff_Registry.view;
+﻿using Retaurant_Staff_Registry.factory;
 
-// RestaurantMemoryStorage storage = new();
-RestaurantSqliteStorage storage = new();
-StaffRegistryService service = new(storage);
-StaffRegistryView view = new();
-StaffRegistryController menuController = new(service, view);
-menuController.StartMenu();
+StaffRegistryFactory factory = new();
+var sqlRegistry = factory.CreateSqliteRegistry();
+var inMeoryRegistry = factory.CreateInMemoryRegistry();
+
+sqlRegistry.StartMenu();
