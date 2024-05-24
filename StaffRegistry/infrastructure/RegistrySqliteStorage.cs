@@ -5,7 +5,7 @@ using DB = StaffRegistry.EntityModels;
 
 namespace StaffRegistry.infrastructure;
 
-internal class RegistrySqliteStorage : Model.IStaffRepository
+public class RegistrySqliteStorage : Model.IStaffRepository
 {
     public void AddStaff(Model.StaffEntity staff)
     {

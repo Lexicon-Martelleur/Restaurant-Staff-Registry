@@ -22,4 +22,12 @@ internal class StaffRegistryFactory
         StaffRegistryView view = new();
         return new(service, view);
     }
+
+    internal StaffRegistryController CreateCSVRegistry()
+    {
+        RegistryCSV storage = new();
+        StaffRegistryService service = new(storage);
+        StaffRegistryView view = new();
+        return new(service, view);
+    }
 }

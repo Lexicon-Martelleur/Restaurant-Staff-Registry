@@ -3,5 +3,6 @@
 StaffRegistryFactory factory = new();
 var sqlRegistry = factory.CreateSqliteRegistry();
 var inMeoryRegistry = factory.CreateInMemoryRegistry();
+var csvStorage = factory.CreateCSVRegistry();
 
-sqlRegistry.StartMenu();
+csvStorage.StartMenu();
