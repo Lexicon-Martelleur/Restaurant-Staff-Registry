@@ -1,10 +1,9 @@
 ﻿using StaffRegistry.factory;
 
 StaffRegistryFactory factory = new();
-var sqlRegistry = factory.CreateSqliteRegistry();
-var inMeoryRegistry = factory.CreateInMemoryRegistry();
-var csvStorage = factory.CreateCSVRegistry();
-var jsonStorage = factory.CreateJSONRegistry();
-var xmlStorage = factory.CreateXMLRegistry();
+var sqliteRegistry = factory.CreateSqliteRegistry();
+var inMemoryRegistry = factory.CreateInMemoryRegistry();
+var csvRegistry = factory.CreateCSVRegistry();
+var jsonRegistry = factory.CreateJSONRegistry();
 
-jsonStorage.StartMenu();
+sqliteRegistry.StartMenu();

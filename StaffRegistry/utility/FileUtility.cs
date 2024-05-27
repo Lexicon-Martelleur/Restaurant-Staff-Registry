@@ -1,11 +1,4 @@
-﻿using StaffRegistry.model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
-using System.Xml.Serialization;
+﻿using System.Xml;
 
 namespace StaffRegistry.utility;
 
@@ -46,32 +39,6 @@ internal static class FileUtility
         catch
         {
             throw new IOException("Could not create a valid json file");
-        }
-    }
-
-    internal static string CreateXMLFileIfNotExit(
-        string xmlFile,
-        string xmlDir,
-        string rootElement)
-    {
-        try
-        {
-            CreateDirIfNotExit(xmlDir);
-            string absolutePath = Path.Combine(Environment.CurrentDirectory, xmlDir, xmlFile);
-
-            if (!File.Exists(absolutePath))
-            {
-                XmlDocument doc = new XmlDocument();
-                XmlElement root = doc.CreateElement(rootElement);
-                doc.AppendChild(root);
-                doc.Save(absolutePath);
-            }
-
-            return absolutePath;
-        }
-        catch
-        {
-            throw new IOException("Could not create a valid xml file");
         }
     }
 

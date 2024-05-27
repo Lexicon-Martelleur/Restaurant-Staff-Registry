@@ -1,4 +1,6 @@
-﻿using System.Text.Json;
+﻿using System.Text;
+using System.Text.Json;
+using StaffRegistry.factory;
 using StaffRegistry.model;
 using StaffRegistry.utility;
 
@@ -18,17 +20,42 @@ public class RegistryJSON : IStaffRepository
         string jsonString = JsonSerializer.Serialize(
             staffList,
             option);
-        File.WriteAllText(
-            FileUtility.CreateFileIfNotExit(jsonFile, jsonDir),
-            jsonString);
+        using StreamWriter writer = new(FileUtility.CreateFileIfNotExit(
+            jsonFile,
+            jsonDir));
+        writer.WriteLine(jsonString);
+    }
+
+    public StaffEntity DeleteStaff(int id)
+    {
+        throw new NotImplementedException();
     }
 
     public IReadOnlyList<StaffEntity> GetAllStaffEntries()
     {
-        string jsonString = File.ReadAllText(FileUtility.CreateJSONFileIfNotExit(
+        using StreamReader reader = new(FileUtility.CreateFileIfNotExit(
             jsonFile,
             jsonDir));
-        List<StaffEntity> staffList = JsonSerializer.Deserialize<List<StaffEntity>>(jsonString) ?? [];
-        return staffList.AsReadOnly();
+        string? line;
+        StringBuilder jsonString = new();
+        while ((line = reader.ReadLine()) != null)
+        {
+            jsonString.AppendLine(line);
+        }
+        List<StaffEntity> staffEntries = JsonSerializer.Deserialize<List<StaffEntity>>(
+            jsonString.ToString()
+        ) ?? [];
+        return staffEntries.AsReadOnly();
+
+    }
+
+    public StaffEntity GetStaff(int id)
+    {
+        throw new NotImplementedException();
+    }
+
+    public StaffEntity UpdateStaff(int id)
+    {
+        throw new NotImplementedException();
     }
 }

@@ -1,6 +1,7 @@
 ﻿using StaffRegistry.constant;
 using StaffRegistry.events;
 using StaffRegistry.model;
+using StaffRegistry.utility;
 using StaffRegistry.view;
 
 namespace StaffRegistry.controller;
@@ -29,16 +30,19 @@ public class StaffRegistryController(
 
     private void AddStaffRegistryEventListners()
     {
-        service.StaffRegistryEventHandler += HandleAddStaffSucess;
-        service.StaffRegistryEventHandler += HandleAddStaffFailure;
+        service.AddStaffEventHandler += HandleAddStaffResult;
+        service.GetStaffEventHandler += HandleGetStaffResult;
     }
 
     private bool HandleMenuSelection(MenuItem menuItem) => menuItem switch
     {
+        MenuItem.ADD_STAFF => ContinueMenu(HandleAddStaffSelection, true),
+        MenuItem.GET_STAFF => ContinueMenu(HandleGetStaffSelection, true),
+        MenuItem.UPDATE_STAFF => ContinueMenu(HandleUpdateStaffSelection, true),
+        MenuItem.DELETE_STAFF => ContinueMenu(HandleDeleteStaffSelection, true),
+        MenuItem.LIST_ALL_STAFF => ContinueMenu(HandleGetStaffEntriesSelection, true),
         MenuItem.DEFAULT => ContinueMenu(HandleInvalidChoice, true),
         MenuItem.EXIT => ContinueMenu(HandleExit, false),
-        MenuItem.LIST_ALL_STAFF => ContinueMenu(HandleSelectAllStaffEntries, true),
-        MenuItem.ADD_STAFF => ContinueMenu(HandleAddStaffMenu, true),
         _ => ContinueMenu(HandleInvalidChoice, true)
     };
 
@@ -53,25 +57,18 @@ public class StaffRegistryController(
         view.PrintInvalidMenuChoice();
     }
 
-    private void HandleExit()
-    {
-        service.StaffRegistryEventHandler -= this.HandleAddStaffSucess;
-        service.StaffRegistryEventHandler -= this.HandleAddStaffFailure;
-        view.PrintExit();
-    }
-
-    private void HandleSelectAllStaffEntries()
-    {
-        IReadOnlyList<StaffEntity> staffEntries = service.GetAllStaffEntries();
-        view.PrintAllStaffEntries(staffEntries);
-    }
-
-    private void HandleAddStaffMenu ()
+    private void HandleAddStaffSelection ()
     {
         try
         {
-            var staffData = view.ReadNewStaffInput();
-            service.AddStaff(staffData);
+            var staffInputData = view.ReadNewStaffInput();
+            PersonalData personalData = new(
+                staffInputData.FName,
+                staffInputData.LName,
+                DateUtility.ConvertDateStringToTimeStamp(staffInputData.DateOfBirth));
+            EmploymentContract contract = new(
+                double.Parse(staffInputData.Salary));
+            service.AddStaff(personalData, contract);
         }
         catch
         {
@@ -79,19 +76,68 @@ public class StaffRegistryController(
         }
     }
 
-    private void HandleAddStaffSucess (object? sender, StaffRegistryEventArgs e)
+    private void HandleAddStaffResult (
+        object? sender,
+        StaffRegistryEventArgs<AddStaffEventData> e)
     {
-        if (e.Status == RepositoryResult.ADD_STAFF_OK)
+        if (e.Status == RepositoryResult.OK)
         {
-            view.PrintStaffAddedSuccessfully(e.Data);
+            view.PrintStaffAddedSuccessfully(e.Data.PersonalData, e.Data.EmploymentContract);
+        }
+        if (e.Status == RepositoryResult.FAILURE)
+        {
+            view.PrintStaffAddedUnsuccessfully(e.Data.PersonalData, e.Data.EmploymentContract);
         }
     }
 
-    private void HandleAddStaffFailure(object? sender, StaffRegistryEventArgs e)
+    private void HandleGetStaffEntriesSelection()
     {
-        if (e.Status == RepositoryResult.ADD_STAFF_FAILURE)
+        IReadOnlyList<StaffEntity> staffEntries = service.GetAllStaffEntries();
+        view.PrintAllStaffEntries(staffEntries);
+    }
+
+    private void HandleGetStaffSelection()
+    {
+        string staffId = view.ReadStaffID();
+        try
         {
-            view.PrintStaffAddedUnsuccessfully(e.Data);
+            service.GetStaff(int.Parse(staffId));
         }
+        catch
+        {
+            view.PrintGetStaffUnsuccessfully(staffId);
+        }
+    }
+
+    private void HandleGetStaffResult(
+        object? sender,
+        StaffRegistryEventArgs<GetStaffEventData> e)
+    {
+        StaffEntity? staff = e.Data.Staff;
+        if (e.Status == RepositoryResult.OK && staff != null)
+        {
+            view.PrintGetStaffSuccessfully(staff);
+        }
+        if (e.Status == RepositoryResult.FAILURE)
+        {
+            view.PrintGetStaffUnsuccessfully($"{e.Data.StaffId}");
+        }
+    }
+
+    private void HandleUpdateStaffSelection()
+    {
+        throw new NotImplementedException();
+    }
+
+    private void HandleDeleteStaffSelection()
+    {
+        throw new NotImplementedException();
+    }
+
+    private void HandleExit()
+    {
+        service.AddStaffEventHandler -= this.HandleAddStaffResult;
+        service.GetStaffEventHandler -= this.HandleGetStaffResult;
+        view.PrintExit();
     }
 }

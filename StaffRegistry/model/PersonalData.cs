@@ -1,8 +1,7 @@
 ﻿namespace StaffRegistry.model;
 
-public record class StaffVO(
+public record struct PersonalData(
     string FName,
     string LName,
-    double Salary,
-    string DateOfBirth
+    long DateOfBirth
 );

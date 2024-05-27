@@ -9,40 +9,36 @@ internal class StaffRegistryFactory
 {
     internal StaffRegistryController CreateInMemoryRegistry()
     {
+        StaffFactory staffFactory = new();
         RegistryMemoryStorage storage = new();
-        StaffRegistryService service = new(storage);
+        StaffRegistryService service = new(storage, staffFactory);
         StaffRegistryView view = new();
         return new(service, view);
     }
 
     internal StaffRegistryController CreateSqliteRegistry()
     {
-        RegistrySqliteStorage storage = new();
-        StaffRegistryService service = new(storage);
+        StaffFactory staffFactory = new();
+        RegistrySqliteStorage storage = new(staffFactory);
+        StaffRegistryService service = new(storage, staffFactory);
         StaffRegistryView view = new();
         return new(service, view);
     }
 
     internal StaffRegistryController CreateCSVRegistry()
     {
-        RegistryCSV storage = new();
-        StaffRegistryService service = new(storage);
+        StaffFactory staffFactory = new();
+        RegistryCSV storage = new(staffFactory);
+        StaffRegistryService service = new(storage, staffFactory);
         StaffRegistryView view = new();
         return new(service, view);
     }
 
     internal StaffRegistryController CreateJSONRegistry()
     {
+        StaffFactory staffFactory = new();
         RegistryJSON storage = new();
-        StaffRegistryService service = new(storage);
-        StaffRegistryView view = new();
-        return new(service, view);
-    }
-
-    internal StaffRegistryController CreateXMLRegistry()
-    {
-        RegistryXML storage = new();
-        StaffRegistryService service = new(storage);
+        StaffRegistryService service = new(storage, staffFactory);
         StaffRegistryView view = new();
         return new(service, view);
     }

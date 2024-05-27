@@ -14,9 +14,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="resources\restaurant.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="resources\restaurant.db">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="aliases\" />
   </ItemGroup>
 
 </Project>

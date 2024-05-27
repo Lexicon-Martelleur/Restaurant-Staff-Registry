@@ -36,7 +36,6 @@ public class RestaurantDB : DbContext
     // https://learn.microsoft.com/en-us/ef/ef6/modeling/code-first/fluent/types-and-properties
     protected override void OnModelCreating(ModelBuilder builder)
     {
-        
         builder.Entity<Staff>()
           .Property(staff => staff.Position)
           .IsRequired()

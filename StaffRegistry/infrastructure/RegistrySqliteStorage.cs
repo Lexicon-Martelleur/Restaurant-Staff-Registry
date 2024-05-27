@@ -1,13 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
 using StaffRegistry.Sqlite3;
-using Model = StaffRegistry.model;
 using DB = StaffRegistry.EntityModels;
+using StaffRegistry.model;
+using StaffRegistry.factory;
 
 namespace StaffRegistry.infrastructure;
 
-public class RegistrySqliteStorage : Model.IStaffRepository
+public class RegistrySqliteStorage(StaffFactory staffFactory) : IStaffRepository
 {
-    public void AddStaff(Model.StaffEntity staff)
+    public void AddStaff(StaffEntity staff)
     {
         using RestaurantDB db = new();
 
@@ -15,8 +16,8 @@ public class RegistrySqliteStorage : Model.IStaffRepository
         {
             FirstName = staff.FName,
             LastName = staff.LName,
-            Position = Model.StaffEntity.Position,
-            Department = Model.StaffEntity.Department,
+            Position = StaffEntity.Position,
+            Department = StaffEntity.Department,
             DateOfBirth = staff.DateOfBirth,
             Salary = staff.Salary,
         };
@@ -41,17 +42,17 @@ public class RegistrySqliteStorage : Model.IStaffRepository
         Console.WriteLine($"affected {affected}");
     }
 
-    public IReadOnlyList<Model.StaffEntity> GetAllStaffEntries()
+    public IReadOnlyList<StaffEntity> GetAllStaffEntries()
     {
         using RestaurantDB db = new();
 
         IQueryable<DB.Staff>? staff = db.Staff?
             .OrderByDescending(staff => staff.FirstName);
 
-        return ConvertDBStaffResultToImmutableList(staff);
+        return MapDBStaffEntriesToStaffList(staff);
     }
 
-    private IReadOnlyList<Model.StaffEntity> ConvertDBStaffResultToImmutableList(
+    private IReadOnlyList<StaffEntity> MapDBStaffEntriesToStaffList(
         IQueryable<DB.Staff>? staff)
     {
         if (staff is null || !staff.Any())
@@ -61,7 +62,7 @@ public class RegistrySqliteStorage : Model.IStaffRepository
 
         return staff
             .OrderByDescending(staff => staff.FirstName)
-            .Select(staff => new Model.StaffEntity(
+            .Select(staff => staffFactory.GetStaffEntity(
                 staff.FirstName,
                 staff.LastName,
                 staff.Salary,
@@ -70,5 +71,38 @@ public class RegistrySqliteStorage : Model.IStaffRepository
             ))
             .ToList()
             .AsReadOnly();
+    }
+
+
+    public StaffEntity GetStaff(int id)
+    {
+        using RestaurantDB db = new();
+        DB.Staff? staff = db.Staff?.Find(id);
+        Console.WriteLine($"staff {staff}");
+        if (staff == null)
+        {
+            throw new Exception("Could not get staff from DB");
+        }
+        return MapDBStaffEntryToStaff(staff);
+    }
+
+    private StaffEntity MapDBStaffEntryToStaff(DB.Staff staff)
+    {
+        return staffFactory.GetStaffEntity(
+            staff.FirstName,
+            staff.LastName,
+            staff.Salary,
+            staff.DateOfBirth,
+            staff.Id);
+    }
+
+    public StaffEntity UpdateStaff(int id)
+    {
+        throw new NotImplementedException();
+    }
+
+    public StaffEntity DeleteStaff(int id)
+    {
+        throw new NotImplementedException();
     }
 }

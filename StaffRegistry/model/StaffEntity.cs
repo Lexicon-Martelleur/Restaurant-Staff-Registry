@@ -1,6 +1,10 @@
 ﻿namespace StaffRegistry.model;
 
-[Serializable]
+
+//TODO! Refactor Entity and VO for Staff.
+// Focus how it is used throughout application, model and db layers.
+
+
 public class StaffEntity
 {
     public const int MIN_SALARY = 1;
@@ -74,20 +78,18 @@ public class StaffEntity
 
     public int StaffID { get; set; }
 
-    // Parameterless constructor required for XML serialization
+    // Needed for serialization ???
     public StaffEntity() { }
 
     public StaffEntity(
-        string fName,
-        string lName,
-        double salary,
-        long dateOfBirth,
+        PersonalData personalData,
+        EmploymentContract employmentContract,
         int staffID)
     {
-        FName = fName;
-        LName = lName;
-        Salary = salary;
-        DateOfBirth = dateOfBirth;
+        FName = personalData.FName;
+        LName = personalData.LName;
+        DateOfBirth = personalData.DateOfBirth;
+        Salary = employmentContract.Salary;
         StaffID = staffID;
     }
 }
