@@ -32,6 +32,7 @@ public class StaffRegistryController(
     {
         service.AddStaffEventHandler += HandleAddStaffResult;
         service.GetStaffEventHandler += HandleGetStaffResult;
+        service.DeleteStaffEventHandler += HandleDeleteStaffResult;
     }
 
     private bool HandleMenuSelection(MenuItem menuItem) => menuItem switch
@@ -98,7 +99,7 @@ public class StaffRegistryController(
 
     private void HandleGetStaffSelection()
     {
-        string staffId = view.ReadStaffID();
+        string staffId = view.ReadStaffIDToView();
         try
         {
             service.GetStaff(int.Parse(staffId));
@@ -131,13 +132,36 @@ public class StaffRegistryController(
 
     private void HandleDeleteStaffSelection()
     {
-        throw new NotImplementedException();
+        string staffId = view.ReadStaffIDToDelete();
+        try
+        {
+            service.DeleteStaff(int.Parse(staffId));
+        }
+        catch
+        {
+            view.PrintDeleteStaffUnsuccessfully(staffId);
+        }
+    }
+
+    private void HandleDeleteStaffResult(
+        object? sender,
+        StaffRegistryEventArgs<int> e)
+    {
+        if (e.Status == RepositoryResult.OK)
+        {
+            view.PrintDeleteStaffSuccessfully(e.Data);
+        }
+        if (e.Status == RepositoryResult.FAILURE)
+        {
+            view.PrintDeleteStaffUnsuccessfully(e.Data);
+        }
     }
 
     private void HandleExit()
     {
         service.AddStaffEventHandler -= this.HandleAddStaffResult;
         service.GetStaffEventHandler -= this.HandleGetStaffResult;
+        service.DeleteStaffEventHandler -= this.HandleDeleteStaffResult;
         view.PrintExit();
     }
 }

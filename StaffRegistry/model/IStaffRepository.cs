@@ -8,7 +8,7 @@ public interface IStaffRepository
 
     public StaffEntity GetStaff(int id);
 
-    public StaffEntity UpdateStaff(int id);
+    public int UpdateStaff(int staffId);
 
-    public StaffEntity DeleteStaff(int id);
+    public int DeleteStaff(int staffId);
 }

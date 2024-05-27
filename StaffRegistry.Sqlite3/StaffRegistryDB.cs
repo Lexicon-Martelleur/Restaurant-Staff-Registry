@@ -4,7 +4,7 @@ using StaffRegistry.EntityModels;
 
 namespace StaffRegistry.Sqlite3;
 
-public class RestaurantDB : DbContext
+public class StaffRegistryDB : DbContext
 {
     public DbSet<Staff>? Staff { get; set; }
 

@@ -23,11 +23,6 @@ public class RegistryCSV(StaffFactory staffFactory) : IStaffRepository
         writer.WriteLine(line);
     }
 
-    public StaffEntity DeleteStaff(int id)
-    {
-        throw new NotImplementedException();
-    }
-
     public IReadOnlyList<StaffEntity> GetAllStaffEntries()
     {
         List<StaffEntity> staffEntries = [];
@@ -55,7 +50,12 @@ public class RegistryCSV(StaffFactory staffFactory) : IStaffRepository
         throw new NotImplementedException();
     }
 
-    public StaffEntity UpdateStaff(int id)
+    public int DeleteStaff(int staffId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public int UpdateStaff(int staffId)
     {
         throw new NotImplementedException();
     }

@@ -1,4 +1,5 @@
 ﻿using StaffRegistry.constant;
+using StaffRegistry.EntityModels;
 using StaffRegistry.events;
 using StaffRegistry.factory;
 
@@ -13,6 +14,10 @@ public class StaffRegistryService(IStaffRepository repository, StaffFactory staf
     public EventHandler<
         StaffRegistryEventArgs<GetStaffEventData>
     >? GetStaffEventHandler;
+
+    public EventHandler<StaffRegistryEventArgs<int>>? DeleteStaffEventHandler;
+
+    public EventHandler<StaffRegistryEventArgs<int>>? UpdateStaffEventHandler;
 
     public void AddStaff(PersonalData personalData, EmploymentContract contract)
     {
@@ -95,5 +100,67 @@ public class StaffRegistryService(IStaffRepository repository, StaffFactory staf
     public IReadOnlyList<StaffEntity> GetAllStaffEntries()
     {
         return repository.GetAllStaffEntries(); 
+    }
+
+    public void DeleteStaff(int staffId)
+    {
+        try
+        {
+            repository.DeleteStaff(staffId); 
+            OnDeleteStaffOk(staffId);
+        }
+        catch
+        {
+            OnDeleteStaffFailure(staffId);
+        }
+    }
+
+    private void OnDeleteStaffOk(int staffId)
+    {
+        StaffRegistryEventArgs<int> eventArgs = new(
+            RepositoryResult.OK,
+            "Delete staff OK",
+            staffId);
+        DeleteStaffEventHandler?.Invoke(this, eventArgs);
+    }
+
+    private void OnDeleteStaffFailure(int staffId)
+    {
+        StaffRegistryEventArgs<int> eventArgs = new(
+            RepositoryResult.FAILURE,
+            "Delete staff failure",
+            staffId);
+        DeleteStaffEventHandler?.Invoke(this, eventArgs);
+    }
+
+    public void UpdateStaff(int staffId)
+    {
+        try
+        {
+            repository.UpdateStaff(staffId);
+            OnUpdateStaffOk(staffId);
+        }
+        catch
+        {
+            OnUpdateStaffFailure(staffId);
+        }
+    }
+
+    private void OnUpdateStaffOk(int staffId)
+    {
+        StaffRegistryEventArgs<int> eventArgs = new(
+            RepositoryResult.OK,
+            "Update staff OK",
+            staffId);
+        UpdateStaffEventHandler?.Invoke(this, eventArgs);
+    }
+
+    private void OnUpdateStaffFailure(int staffId)
+    {
+        StaffRegistryEventArgs<int> eventArgs = new(
+            RepositoryResult.FAILURE,
+            "Update staff failure",
+            staffId);
+        UpdateStaffEventHandler?.Invoke(this, eventArgs);
     }
 }

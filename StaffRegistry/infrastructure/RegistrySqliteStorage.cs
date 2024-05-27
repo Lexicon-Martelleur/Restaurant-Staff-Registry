@@ -10,7 +10,7 @@ public class RegistrySqliteStorage(StaffFactory staffFactory) : IStaffRepository
 {
     public void AddStaff(StaffEntity staff)
     {
-        using RestaurantDB db = new();
+        using StaffRegistryDB db = new();
 
         DB.Staff staffEnityModel = new()
         {
@@ -26,33 +26,31 @@ public class RegistrySqliteStorage(StaffFactory staffFactory) : IStaffRepository
         SaveTrackedChangesToDB(db);
     }
 
-    private void AddStaffToDBChangeTracking (RestaurantDB db, DB.Staff staffEntityModel)
+    private void AddStaffToDBChangeTracking (StaffRegistryDB db, DB.Staff staffEntityModel)
     {
         if (db.Staff is null)
         {
             return;
         }
         EntityEntry<DB.Staff> entity = db.Staff.Add(staffEntityModel);
-        Console.WriteLine($"State: {entity.State}, StaffId: {staffEntityModel.Id}");
     }
 
-    private void SaveTrackedChangesToDB(RestaurantDB db)
+    private void SaveTrackedChangesToDB(StaffRegistryDB db)
     {
         int affected = db.SaveChanges();
-        Console.WriteLine($"affected {affected}");
     }
 
     public IReadOnlyList<StaffEntity> GetAllStaffEntries()
     {
-        using RestaurantDB db = new();
+        using StaffRegistryDB db = new();
 
         IQueryable<DB.Staff>? staff = db.Staff?
             .OrderByDescending(staff => staff.FirstName);
 
-        return MapDBStaffEntriesToStaffList(staff);
+        return MapDBStaffEntriesToStaffEntityList(staff);
     }
 
-    private IReadOnlyList<StaffEntity> MapDBStaffEntriesToStaffList(
+    private IReadOnlyList<StaffEntity> MapDBStaffEntriesToStaffEntityList(
         IQueryable<DB.Staff>? staff)
     {
         if (staff is null || !staff.Any())
@@ -76,17 +74,17 @@ public class RegistrySqliteStorage(StaffFactory staffFactory) : IStaffRepository
 
     public StaffEntity GetStaff(int id)
     {
-        using RestaurantDB db = new();
+        using StaffRegistryDB db = new();
         DB.Staff? staff = db.Staff?.Find(id);
         Console.WriteLine($"staff {staff}");
         if (staff == null)
         {
             throw new Exception("Could not get staff from DB");
         }
-        return MapDBStaffEntryToStaff(staff);
+        return MapDBStaffEntryToStaffEntity(staff);
     }
 
-    private StaffEntity MapDBStaffEntryToStaff(DB.Staff staff)
+    private StaffEntity MapDBStaffEntryToStaffEntity(DB.Staff staff)
     {
         return staffFactory.GetStaffEntity(
             staff.FirstName,
@@ -96,13 +94,50 @@ public class RegistrySqliteStorage(StaffFactory staffFactory) : IStaffRepository
             staff.Id);
     }
 
-    public StaffEntity UpdateStaff(int id)
+    public int UpdateStaff(int staffEntity)
     {
-        throw new NotImplementedException();
+        //using StaffRegistryDB db = new();
+        //DB.Staff staffEntry = MapStaffEntityToDBStaffEntry(staffEntity);
+        //db.Staff?.Remove(staffEntry);
+
+        //#if DEBUG
+        //db.ChangeTracker.DetectChanges();
+        //Console.WriteLine("db.ChangeTracker.DebugView.LongView");
+        //Console.WriteLine(db.ChangeTracker.DebugView.LongView);
+        //#endif
+
+        //db.SaveChanges();
+        //return staffEntity;
+        return 0;
     }
 
-    public StaffEntity DeleteStaff(int id)
+    public int DeleteStaff(int staffId)
     {
-        throw new NotImplementedException();
+        using StaffRegistryDB db = new();
+        DB.Staff staffEntry = new DB.Staff { Id = staffId };
+        db.Attach(staffEntry);
+        db.Staff?.Remove(staffEntry);
+
+        #if DEBUG
+        db.ChangeTracker.DetectChanges();
+        Console.WriteLine("db.ChangeTracker.DebugView.LongView");
+        Console.WriteLine(db.ChangeTracker.DebugView.LongView);
+        #endif
+
+        db.SaveChanges();
+        return staffId;
+    }
+
+    private DB.Staff MapStaffEntityToDBStaffEntry(StaffEntity staffEntity)
+    {
+        return new DB.Staff()
+        {
+            Id = staffEntity.StaffID,
+            FirstName = staffEntity.FName,
+            LastName = staffEntity.FName,
+            Position = StaffEntity.Position,
+            Department = StaffEntity.Department,
+            DateOfBirth = staffEntity.DateOfBirth,
+        };
     }
 }

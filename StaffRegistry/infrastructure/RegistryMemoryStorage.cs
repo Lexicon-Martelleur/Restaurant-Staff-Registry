@@ -11,11 +11,6 @@ public class RegistryMemoryStorage : IStaffRepository
         _staffEntries.Add(staff);
     }
 
-    public StaffEntity DeleteStaff(int id)
-    {
-        throw new NotImplementedException();
-    }
-
     public IReadOnlyList<StaffEntity> GetAllStaffEntries()
     {
         return _staffEntries.AsReadOnly();
@@ -26,7 +21,12 @@ public class RegistryMemoryStorage : IStaffRepository
         throw new NotImplementedException();
     }
 
-    public StaffEntity UpdateStaff(int id)
+    public int DeleteStaff(int staffId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public int UpdateStaff(int staffId)
     {
         throw new NotImplementedException();
     }

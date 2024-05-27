@@ -66,9 +66,24 @@ public class StaffRegistryView
         );
     }
 
-    public string ReadStaffID()
+    public string ReadStaffIDToView()
     {
-        Console.Write("\nEnter staff ID: ");
+        return ReadStaffID("view");
+    }
+
+    public string ReadStaffIDToDelete()
+    {
+        return ReadStaffID("delete");
+    }
+
+    public string ReadStaffIDToUpdate()
+    {
+        return ReadStaffID("update");
+    }
+
+    private string ReadStaffID(string ops)
+    {
+        Console.Write($"\nEnter staff ID to {ops}: ");
         return Console.ReadLine() ?? "";
     }
 
@@ -134,6 +149,21 @@ public class StaffRegistryView
     public void PrintGetStaffUnsuccessfully(string staffId)
     {
         Console.WriteLine($"\n⚠️ Could not get staff with id: {staffId}");
+    }
+
+    public void PrintDeleteStaffUnsuccessfully(string staffId)
+    {
+        Console.WriteLine($"\n⚠️ Could not delete staff with id: {staffId}");
+    }
+
+    public void PrintDeleteStaffUnsuccessfully(int staffId)
+    {
+        Console.WriteLine($"\n⚠️ Could not delete staff with id: {staffId}");
+    }
+
+    public void PrintDeleteStaffSuccessfully(int staffId)
+    {
+        Console.WriteLine($"✅ StaffID {staffId} deleted.");
     }
 
     public void PrintExit()

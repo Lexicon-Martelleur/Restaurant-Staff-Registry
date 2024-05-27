@@ -26,11 +26,6 @@ public class RegistryJSON : IStaffRepository
         writer.WriteLine(jsonString);
     }
 
-    public StaffEntity DeleteStaff(int id)
-    {
-        throw new NotImplementedException();
-    }
-
     public IReadOnlyList<StaffEntity> GetAllStaffEntries()
     {
         using StreamReader reader = new(FileUtility.CreateFileIfNotExit(
@@ -54,7 +49,12 @@ public class RegistryJSON : IStaffRepository
         throw new NotImplementedException();
     }
 
-    public StaffEntity UpdateStaff(int id)
+    public int DeleteStaff(int staffId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public int UpdateStaff(int staffId)
     {
         throw new NotImplementedException();
     }
