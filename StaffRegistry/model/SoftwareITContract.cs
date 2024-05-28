@@ -1,4 +1,6 @@
-﻿namespace StaffRegistry.model;
+﻿using StaffRegistry.constant;
+
+namespace StaffRegistry.model;
 
 internal record struct SoftwareITContract(
     double Salary
