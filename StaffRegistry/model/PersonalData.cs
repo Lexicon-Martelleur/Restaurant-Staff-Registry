@@ -1,6 +1,6 @@
 ﻿namespace StaffRegistry.model;
 
-public record struct PersonalData(
+internal record struct PersonalData(
     string FName,
     string LName,
     long DateOfBirth

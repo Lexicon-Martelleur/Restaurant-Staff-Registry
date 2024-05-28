@@ -2,7 +2,7 @@
 
 namespace StaffRegistry.infrastructure;
 
-public class RegistryMemoryStorage : IStaffRepository
+internal class RegistryMemoryStorage : IStaffRepository
 {
     private readonly List<StaffEntity> _staffEntries = [];
 

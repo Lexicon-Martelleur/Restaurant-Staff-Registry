@@ -3,15 +3,15 @@ using StaffRegistry.model;
 
 namespace StaffRegistry.events;
 
-public class StaffRegistryEventArgs<EventData>(
+internal class StaffRegistryEventArgs<EventData>(
     RepositoryResult status,
     string msg,
     EventData data
     ) : EventArgs
 {
-    public RepositoryResult Status { get; } = status;
+    internal RepositoryResult Status { get; } = status;
 
-    public String Msg { get; } = msg;
+    internal String Msg { get; } = msg;
 
-    public EventData Data { get; } = data;
+    internal EventData Data { get; } = data;
 }

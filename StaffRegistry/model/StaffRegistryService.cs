@@ -5,24 +5,23 @@ using StaffRegistry.factory;
 
 namespace StaffRegistry.model;
 
-public class StaffRegistryService(IStaffRepository repository, StaffFactory staffFactory)
+internal class StaffRegistryService(IStaffRepository repository, StaffFactory staffFactory)
 {
-    public EventHandler<
+    internal EventHandler<
         StaffRegistryEventArgs<AddStaffEventData>
     >? AddStaffEventHandler;
 
-    public EventHandler<
+    internal EventHandler<
         StaffRegistryEventArgs<GetStaffEventData>
     >? GetStaffEventHandler;
 
-    public EventHandler<StaffRegistryEventArgs<int>>? DeleteStaffEventHandler;
+    internal EventHandler<StaffRegistryEventArgs<int>>? DeleteStaffEventHandler;
 
-    public EventHandler<StaffRegistryEventArgs<int>>? UpdateStaffEventHandler;
+    internal EventHandler<StaffRegistryEventArgs<int>>? UpdateStaffEventHandler;
 
-    public void AddStaff(PersonalData personalData, EmploymentContract contract)
+    internal void AddStaff(PersonalData personalData, EmploymentContract contract)
     {
         try {
-            Console.WriteLine($"staffItems {personalData}");
             StaffEntity staff = staffFactory.CreateStaffEntity(
                 personalData.FName,
                 personalData.LName,
@@ -31,15 +30,13 @@ public class StaffRegistryService(IStaffRepository repository, StaffFactory staf
             repository.AddStaff(staff);
             OnAddStaffOk(personalData, contract);
         }
-        catch (ArgumentOutOfRangeException ex)
+        catch (StaffEntityException ex)
         {
-            Console.WriteLine(ex.StackTrace);
             OnAddStaffFailure(personalData, contract, ex.Message);
             
         }
         catch (Exception ex)
         {
-            Console.WriteLine(ex.StackTrace);
             OnAddStaffFailure(personalData, contract, "Invalid property value");
         }
     }
@@ -67,7 +64,7 @@ public class StaffRegistryService(IStaffRepository repository, StaffFactory staf
         AddStaffEventHandler?.Invoke(this, eventArgs);
     }
 
-    public void GetStaff(int staffId)
+    internal void GetStaff(int staffId)
     {
         try
         {
@@ -97,12 +94,12 @@ public class StaffRegistryService(IStaffRepository repository, StaffFactory staf
         GetStaffEventHandler?.Invoke(this, eventArgs);
     }
 
-    public IReadOnlyList<StaffEntity> GetAllStaffEntries()
+    internal IReadOnlyList<StaffEntity> GetAllStaffEntries()
     {
         return repository.GetAllStaffEntries(); 
     }
 
-    public void DeleteStaff(int staffId)
+    internal void DeleteStaff(int staffId)
     {
         try
         {
@@ -133,7 +130,7 @@ public class StaffRegistryService(IStaffRepository repository, StaffFactory staf
         DeleteStaffEventHandler?.Invoke(this, eventArgs);
     }
 
-    public void UpdateStaff(int staffId)
+    internal void UpdateStaff(int staffId)
     {
         try
         {

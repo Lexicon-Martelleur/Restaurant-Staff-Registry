@@ -1,5 +1,5 @@
 ﻿namespace StaffRegistry.model;
 
-public record struct EmploymentContract(
+internal record struct EmploymentContract(
     double Salary
 );

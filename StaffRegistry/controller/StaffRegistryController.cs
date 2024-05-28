@@ -6,11 +6,11 @@ using StaffRegistry.view;
 
 namespace StaffRegistry.controller;
 
-public class StaffRegistryController(
+internal class StaffRegistryController(
     StaffRegistryService service,
     StaffRegistryView view)
 {
-    public void StartMenu () {
+    internal void StartMenu () {
         view.PrintWelcome();
         AddStaffRegistryEventListners();
         bool useMenu = true;

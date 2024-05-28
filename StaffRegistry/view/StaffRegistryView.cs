@@ -10,9 +10,9 @@ namespace StaffRegistry.view;
 //  2) Add colors.
 //TODO! Update view with custom console!
 //TODO! Move parsing responsibility to the controller.
-public class StaffRegistryView
+internal class StaffRegistryView
 {
-    public void PrintWelcome()
+    internal void PrintWelcome()
     {
         try { Console.Clear(); } catch { };
         Console.WriteLine($"""
@@ -23,7 +23,7 @@ public class StaffRegistryView
 
         """);
     }
-    public MenuItem ReadMenuSelection()
+    internal MenuItem ReadMenuSelection()
     {
         Console.WriteLine("""
 
@@ -41,7 +41,7 @@ public class StaffRegistryView
         return GetSelectedMenuItem(selectedMenu ?? "");
     }
 
-    private MenuItem GetSelectedMenuItem(string selectedMenu) => selectedMenu switch
+    internal MenuItem GetSelectedMenuItem(string selectedMenu) => selectedMenu switch
     {
         "1" => MenuItem.ADD_STAFF,
         "2" => MenuItem.GET_STAFF,
@@ -52,7 +52,7 @@ public class StaffRegistryView
         _ => MenuItem.DEFAULT
     };
 
-    public StaffInputData ReadNewStaffInput ()
+    internal StaffInputData ReadNewStaffInput ()
     {
         Console.Write("\nEnter new staff (FirstName LastName Salary$ DateOfBirth(yyyy-mm-dd)): ");
         string newStaffInput = Console.ReadLine() ?? "";
@@ -66,17 +66,17 @@ public class StaffRegistryView
         );
     }
 
-    public string ReadStaffIDToView()
+    internal string ReadStaffIDToView()
     {
         return ReadStaffID("view");
     }
 
-    public string ReadStaffIDToDelete()
+    internal string ReadStaffIDToDelete()
     {
         return ReadStaffID("delete");
     }
 
-    public string ReadStaffIDToUpdate()
+    internal string ReadStaffIDToUpdate()
     {
         return ReadStaffID("update");
     }
@@ -87,7 +87,7 @@ public class StaffRegistryView
         return Console.ReadLine() ?? "";
     }
 
-    public void PrintStaffAddedSuccessfully(
+    internal void PrintStaffAddedSuccessfully(
         PersonalData personalData,
         EmploymentContract contract)
     {
@@ -98,12 +98,12 @@ public class StaffRegistryView
         """);
     }
 
-    public void PrintStaffAddedUnsuccessfully()
+    internal void PrintStaffAddedUnsuccessfully()
     {
         Console.WriteLine("⚠️ Failure! Staff could not be added to the registry");
     }
 
-    public void PrintStaffAddedUnsuccessfully(
+    internal void PrintStaffAddedUnsuccessfully(
         PersonalData personalData,
         EmploymentContract contract)
     {
@@ -115,7 +115,7 @@ public class StaffRegistryView
         );
     }
 
-    public void PrintAllStaffEntries(IReadOnlyList<StaffEntity> staffEntries)
+    internal void PrintAllStaffEntries(IReadOnlyList<StaffEntity> staffEntries)
     {
         Console.WriteLine("\nList of registered staff:");
 
@@ -133,12 +133,12 @@ public class StaffRegistryView
         Console.WriteLine("");
     }
 
-    public void PrintInvalidMenuChoice()
+    internal void PrintInvalidMenuChoice()
     {
         Console.WriteLine("\n⚠️ Not valid selection");
     }
 
-    public void PrintGetStaffSuccessfully(StaffEntity staff)
+    internal void PrintGetStaffSuccessfully(StaffEntity staff)
     {
         string dateOfBirth = DateUtility.ConvertTimeStampToDateString(staff.DateOfBirth);
         Console.WriteLine($"""
@@ -146,27 +146,27 @@ public class StaffRegistryView
         """);
     }
 
-    public void PrintGetStaffUnsuccessfully(string staffId)
+    internal void PrintGetStaffUnsuccessfully(string staffId)
     {
         Console.WriteLine($"\n⚠️ Could not get staff with id: {staffId}");
     }
 
-    public void PrintDeleteStaffUnsuccessfully(string staffId)
+    internal void PrintDeleteStaffUnsuccessfully(string staffId)
     {
         Console.WriteLine($"\n⚠️ Could not delete staff with id: {staffId}");
     }
 
-    public void PrintDeleteStaffUnsuccessfully(int staffId)
+    internal void PrintDeleteStaffUnsuccessfully(int staffId)
     {
         Console.WriteLine($"\n⚠️ Could not delete staff with id: {staffId}");
     }
 
-    public void PrintDeleteStaffSuccessfully(int staffId)
+    internal void PrintDeleteStaffSuccessfully(int staffId)
     {
         Console.WriteLine($"✅ StaffID {staffId} deleted.");
     }
 
-    public void PrintExit()
+    internal void PrintExit()
     {
         Console.WriteLine("\n🍕🍕🍕 Goodbye 🍕🍕🍕");
     }

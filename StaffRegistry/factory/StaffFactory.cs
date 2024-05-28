@@ -3,9 +3,9 @@ using StaffRegistry.utility;
 
 namespace StaffRegistry.factory;
 
-public class StaffFactory
+internal class StaffFactory
 {
-    public StaffEntity CreateStaffEntity(
+    internal StaffEntity CreateStaffEntity(
         string fName,
         string lName,
         double salary,
@@ -19,7 +19,7 @@ public class StaffFactory
             IDUtility.GetInMemoryUniqueID());
     }
 
-    public StaffEntity GetStaffEntity(
+    internal StaffEntity GetStaffEntity(
         string fName,
         string lName,
         double salary,

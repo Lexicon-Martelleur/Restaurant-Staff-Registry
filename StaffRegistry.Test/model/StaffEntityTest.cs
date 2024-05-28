@@ -1,41 +1,71 @@
-﻿using Retaurant_Staff_Registry.model;
+﻿using StaffRegistry.model;
 
-namespace Restaurant_Staff_Registry.Test.model;
+namespace StaffRegistryTest.Test.model;
 
 public class StaffEntityTest
 {
-    public class StaffConstructor()
+    public class StaffEntityConstructor()
     {
         public static IEnumerable<object[]> ValidTestData = [
-            ["Eric", "Larson", 236666.3, 123, 1],
-            ["Lisa", "Erikson", 336666.3, 123, 2],
-            ["Anna", "Jonson", 436666.3, 123, 3],
+            [
+                new PersonalData("Eric", "Larson", 123),
+                new EmploymentContract(1234),
+                1
+            ],
+            [
+                new PersonalData("Lisa", "Larson", 123),
+                new EmploymentContract(1234),
+                2
+            ],
+            [
+                new PersonalData("Anna", "Larson", 123),
+                new EmploymentContract(1234),
+                3
+            ],
         ];
 
         [Theory(DisplayName = "Create a valid staff entry")]
         [MemberData(nameof(ValidTestData))]
-        public void T1(string fName, string lName, double salary, int dateOfBirth, int staffID)
+        internal void T1(
+            PersonalData personalData,
+            EmploymentContract contract,
+            int staffId)
         {
-            StaffEntity staff = new(fName, lName, salary, dateOfBirth, staffID);
-            Assert.Equal(staff.FName, fName);
-            Assert.Equal(staff.LName, lName);
-            Assert.Equal(staff.Salary, salary);
-            Assert.Equal(staff.StaffID, staffID);
+            StaffEntity staff = new(personalData, contract, staffId);
+            Assert.Equal(staff.FName, personalData.FName);
+            Assert.Equal(staff.LName, personalData.LName);
+            Assert.Equal(staff.Salary, contract.Salary);
+            Assert.Equal(staff.StaffID, staffId);
         }
 
         public static IEnumerable<object[]> InvalidTestData = [
-            ["Eric", "Larson", -236666.3, 123, 1],
-            ["Lisa", "", -336666.3, 123, 2],
-            ["", "Jonson", -436666.3, 123, 3],
+            [
+                new PersonalData("Eric", "", 123),
+                new EmploymentContract(1234),
+                1
+            ],
+            [
+                new PersonalData("Lisa", "Scott", 123),
+                new EmploymentContract(0),
+                2
+            ],
+            [
+                new PersonalData("", "", 123),
+                new EmploymentContract(1234),
+                3
+            ],
         ];
 
         [Theory(DisplayName = "Do not create a staff entry")]
         [MemberData(nameof(InvalidTestData))]
-        public void T2(string fName, string lName, double salary, int dateOfBirth, int staffID)
+        internal void T2(
+            PersonalData personalData,
+            EmploymentContract contract,
+            int staffId)
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() =>
+            Assert.Throws<StaffEntityException>(() =>
             {
-                StaffEntity staff = new(fName, lName, salary, dateOfBirth, staffID);
+                StaffEntity staff = new(personalData, contract, staffId);
             }
             );
         }

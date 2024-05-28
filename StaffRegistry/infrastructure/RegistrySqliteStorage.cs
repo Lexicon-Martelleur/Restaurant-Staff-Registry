@@ -6,7 +6,7 @@ using StaffRegistry.factory;
 
 namespace StaffRegistry.infrastructure;
 
-public class RegistrySqliteStorage(StaffFactory staffFactory) : IStaffRepository
+internal class RegistrySqliteStorage(StaffFactory staffFactory) : IStaffRepository
 {
     public void AddStaff(StaffEntity staff)
     {
@@ -114,7 +114,7 @@ public class RegistrySqliteStorage(StaffFactory staffFactory) : IStaffRepository
     public int DeleteStaff(int staffId)
     {
         using StaffRegistryDB db = new();
-        DB.Staff staffEntry = new DB.Staff { Id = staffId };
+        DB.Staff staffEntry = new() { Id = staffId };
         db.Attach(staffEntry);
         db.Staff?.Remove(staffEntry);
 

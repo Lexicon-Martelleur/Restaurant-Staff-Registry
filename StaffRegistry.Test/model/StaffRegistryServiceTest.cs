@@ -1,143 +1,169 @@
-﻿using Retaurant_Staff_Registry.constant;
-using Retaurant_Staff_Registry.events;
-using Retaurant_Staff_Registry.model;
+﻿using StaffRegistry.constant;
+using StaffRegistry.events;
+using StaffRegistry.factory;
+using StaffRegistry.model;
 
-namespace Restaurant_Staff_Registry.model;
+namespace StaffRegistryTest.model;
 
 public class StaffTest
 {
     public class Fixture
     {
-        public StaffRegistryService StaffRegistryService { get; private init; }
-        public Mock<IStaffRepository> MockRepository { get; private init; }
+        internal StaffRegistryService StaffRegistryService { get; private init; }
+        internal Mock<IStaffRepository> MockRepository { get; private init; }
+        internal Mock<StaffFactory> MockStaffFactory { get; private init; }
 
         public Fixture()
         {
             MockRepository = new();
-            StaffRegistryService = new(MockRepository.Object);
+            MockStaffFactory = new();
+            StaffRegistryService = new(MockRepository.Object, MockStaffFactory.Object);
         }
     }
 
     public class AddStaffSuccessCase(Fixture fixture) : IClassFixture<Fixture>, IDisposable
     {
         private readonly Fixture _f = fixture;
-        private readonly List<EventHandler<StaffRegistryEventArgs>> eventHandlers = [];
+        private readonly List<EventHandler<StaffRegistryEventArgs<(
+            PersonalData PersonalData,
+            EmploymentContract EmploymentContract
+        )>>> eventHandlers = [];
         public static IEnumerable<object[]> TestData = [
             [
-                new List<StaffVO> {
-                    new("Eric", "Larson", 2366, "1999-01-01"),
-                    new("Lisa", "Erikson", 336, "1999-01-01"),
-                    new("Anna", "Jonson", 4366, "1999-01-01")
-                }
+                new PersonalData("Eric", "Larson", 123456),
+                new EmploymentContract(123)
             ],
+            [
+                new PersonalData("Mia", "Larson", 123456),
+                new EmploymentContract(123)
+            ],
+            [
+                new PersonalData("Anna", "Nilsson", 123456),
+                new EmploymentContract(123)
+            ],
+            [
+                new PersonalData("Carl", "Scott", 123456),
+                new EmploymentContract(123)
+            ]
         ];
 
         [Theory(DisplayName = "Call add staff to repository if valid staff data")]
         [MemberData(nameof(TestData))]
-        public void T1(List<StaffVO> staffDataItems)
+        internal void T1(PersonalData personalData, EmploymentContract contract)
         {
-            foreach (StaffVO staffData in staffDataItems)
-            {
-                _f.StaffRegistryService.AddStaff(staffData);
-            }
+            
+            _f.StaffRegistryService.AddStaff(personalData, contract);
+
+            int expectedCallTimes = 1;
 
             _f.MockRepository.Verify(repository =>
                 repository.AddStaff(It.IsAny<StaffEntity>()),
-                Times.Exactly(staffDataItems.Count)
+                Times.Exactly(expectedCallTimes)
             );
         }
 
         [Theory(DisplayName = "Raise OK event if valid staff data")]
         [MemberData(nameof(TestData))]
-        public void T2(List<StaffVO> staffDataItems)
+        internal void T2(PersonalData personalData, EmploymentContract contract)
         {
             bool isRaised = false;
-            RepositoryResult result = RepositoryResult.ADD_STAFF_FAILURE;
+            RepositoryResult result = RepositoryResult.FAILURE;
 
-            foreach (StaffVO staffData in staffDataItems)
+            EventHandler<StaffRegistryEventArgs<(
+                PersonalData PersonalData,
+                EmploymentContract EmploymentContract
+            )>> handler = (sender, e) =>
             {
-                EventHandler<StaffRegistryEventArgs> handler = (sender, e) =>
-                {
-                    isRaised = true;
-                    result = e.Status;
-                };
+                isRaised = true;
+                result = e.Status;
+            };
 
-                eventHandlers.Add(handler);
-                _f.StaffRegistryService.StaffRegistryEventHandler += handler;
-                _f.StaffRegistryService.AddStaff(staffData);
-                Assert.True(isRaised);
-                Assert.Equal(RepositoryResult.ADD_STAFF_OK, result);
-            }
+            eventHandlers.Add(handler);
+            _f.StaffRegistryService.AddStaffEventHandler += handler;
+            _f.StaffRegistryService.AddStaff(personalData, contract);
+            Assert.True(isRaised);
+            Assert.Equal(RepositoryResult.OK, result);
         }
 
         public void Dispose()
         {
-            foreach (EventHandler<StaffRegistryEventArgs> handler in eventHandlers)
+            foreach (var handler in eventHandlers)
             {
-                _f.StaffRegistryService.StaffRegistryEventHandler -= handler;
+                _f.StaffRegistryService.AddStaffEventHandler -= handler;
             }
             _f.MockRepository.Reset();
         }
     }
 
-    public class AddStaffFailureCase(Fixture f) : IClassFixture<Fixture>, IDisposable
+    public class AddStaffFailureCase(Fixture fixture) : IClassFixture<Fixture>, IDisposable
     {
-        private readonly Fixture _f = f;
-        private readonly List<EventHandler<StaffRegistryEventArgs>> eventHandlers = [];
-
+        private readonly Fixture _f = fixture;
+        private readonly List<EventHandler<StaffRegistryEventArgs<(
+            PersonalData PersonalData,
+            EmploymentContract EmploymentContract
+        )>>> eventHandlers = [];
         public static IEnumerable<object[]> TestData = [
             [
-                new List<StaffVO> {
-                    new("Eric", "", 2366, "1999-01-01"),
-                    new("", "Erikson", 336, "1999-01-01"),
-                    new("Anna", "Jonson", -4366, "1999-01-01")
-                }
+                new PersonalData("", "Larson", 123456),
+                new EmploymentContract(123)
             ],
+            [
+                new PersonalData("Mia", "Larson", 123456),
+                new EmploymentContract(0)
+            ],
+            [
+                new PersonalData("Anna", "", 123456),
+                new EmploymentContract(123)
+            ],
+            [
+                new PersonalData("", "", 123456),
+                new EmploymentContract(123)
+            ]
         ];
 
-        [Theory(DisplayName = "Not call add staff to repository if invalid staff data")]
+        [Theory(DisplayName = "Do not call add staff to repository if valid staff data")]
         [MemberData(nameof(TestData))]
-        public void T1(List<StaffVO> staffDataItems)
+        internal void T1(PersonalData personalData, EmploymentContract contract)
         {
-            foreach (StaffVO staffData in staffDataItems)
-            {
-                _f.StaffRegistryService.AddStaff(staffData);
-            }
+
+            _f.StaffRegistryService.AddStaff(personalData, contract);
+
+            int expectedCallTimes = 0;
 
             _f.MockRepository.Verify(repository =>
                 repository.AddStaff(It.IsAny<StaffEntity>()),
-                Times.Never()
+                Times.Exactly(expectedCallTimes)
             );
         }
 
-        [Theory(DisplayName = "Raise failure event if invalid staff data")]
+        [Theory(DisplayName = "Raise Failure event if valid staff data")]
         [MemberData(nameof(TestData))]
-        public void T2(List<StaffVO> staffDataItems)
+        internal void T2(PersonalData personalData, EmploymentContract contract)
         {
             bool isRaised = false;
-            RepositoryResult result = RepositoryResult.ADD_STAFF_OK;
+            RepositoryResult result = RepositoryResult.FAILURE;
 
-            foreach (StaffVO staffData in staffDataItems)
+            EventHandler<StaffRegistryEventArgs<(
+                PersonalData PersonalData,
+                EmploymentContract EmploymentContract
+            )>> handler = (sender, e) =>
             {
-                EventHandler<StaffRegistryEventArgs> handler = (sender, e) =>
-                {
-                    isRaised = true;
-                    result = e.Status;
-                };
+                isRaised = true;
+                result = e.Status;
+            };
 
-                eventHandlers.Add(handler);
-                _f.StaffRegistryService.StaffRegistryEventHandler += handler;
-                _f.StaffRegistryService.AddStaff(staffData);
-                Assert.True(isRaised);
-                Assert.Equal(RepositoryResult.ADD_STAFF_FAILURE, result);
-            }
+            eventHandlers.Add(handler);
+            _f.StaffRegistryService.AddStaffEventHandler += handler;
+            _f.StaffRegistryService.AddStaff(personalData, contract);
+            Assert.True(isRaised);
+            Assert.Equal(RepositoryResult.FAILURE, result);
         }
 
         public void Dispose()
         {
-            foreach (EventHandler<StaffRegistryEventArgs> handler in eventHandlers)
+            foreach (var handler in eventHandlers)
             {
-                _f.StaffRegistryService.StaffRegistryEventHandler -= handler;
+                _f.StaffRegistryService.AddStaffEventHandler -= handler;
             }
             _f.MockRepository.Reset();
         }

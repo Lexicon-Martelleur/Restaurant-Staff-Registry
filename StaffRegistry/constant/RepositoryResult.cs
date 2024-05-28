@@ -1,6 +1,6 @@
 ﻿namespace StaffRegistry.constant;
 
-public enum RepositoryResult
+internal enum RepositoryResult
 {
     OK,
     FAILURE

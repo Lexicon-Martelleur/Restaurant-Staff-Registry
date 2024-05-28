@@ -1,14 +1,14 @@
 ﻿namespace StaffRegistry.model;
 
-public interface IStaffRepository
+internal interface IStaffRepository
 {
-    public void AddStaff(StaffEntity staff);
+    void AddStaff(StaffEntity staff);
 
-    public IReadOnlyList<StaffEntity> GetAllStaffEntries();
+    IReadOnlyList<StaffEntity> GetAllStaffEntries();
 
-    public StaffEntity GetStaff(int id);
+    StaffEntity GetStaff(int id);
 
-    public int UpdateStaff(int staffId);
+    int UpdateStaff(int staffId);
 
-    public int DeleteStaff(int staffId);
+    int DeleteStaff(int staffId);
 }

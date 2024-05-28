@@ -4,11 +4,12 @@ using StaffRegistry.utility;
 
 namespace StaffRegistry.infrastructure;
 
-public class RegistryCSV(StaffFactory staffFactory) : IStaffRepository
+internal class RegistryCSV(StaffFactory staffFactory) : IStaffRepository
 {
     private readonly string csvFile = "restaurant.csv";
 
     private readonly string csvDir = "resources";
+
     public void AddStaff(StaffEntity staff)
     {
         bool append = true;

@@ -1,23 +1,18 @@
 ﻿namespace StaffRegistry.model;
 
-
-//TODO! Refactor Entity and VO for Staff.
-// Focus how it is used throughout application, model and db layers.
-
-
-public class StaffEntity
+internal class StaffEntity
 {
-    public const int MIN_SALARY = 1;
-    
-    public const int MAX_SALARY = 9999999;
-    
-    public const int MIN_NAME_SIZE = 1;
-    
-    public const int MAX_NAME_SIZE = 100;
+    internal const int MIN_SALARY = 1;
 
-    public const string Position = "System Development";
+    internal const int MAX_SALARY = 9999999;
 
-    public const string Department = "IT";
+    internal const int MIN_NAME_SIZE = 1;
+
+    internal const int MAX_NAME_SIZE = 100;
+
+    internal const string Position = "System Development";
+
+    internal const string Department = "IT";
     
     private string _fName = "Anonymous";
     
@@ -25,7 +20,7 @@ public class StaffEntity
     
     private double _salary = MIN_SALARY;
 
-    public string FName {
+    internal string FName {
         get => _fName;
         set
         {
@@ -36,12 +31,12 @@ public class StaffEntity
             }
             else
             {
-                throw new ArgumentOutOfRangeException(nameof(FName), "Invalid name range");
+                throw new StaffEntityException(nameof(FName), "Invalid name range");
             }
         }
     }
 
-    public string LName {
+    internal string LName {
         get => _lName;
         set
         {
@@ -52,12 +47,12 @@ public class StaffEntity
             }
             else
             {
-                throw new ArgumentOutOfRangeException(nameof(LName), "Invalid name range");
+                throw new StaffEntityException(nameof(LName), "Invalid name range");
             }
         }
     }
-    
-    public double Salary
+
+    internal double Salary
     {
         get => _salary;
         set
@@ -69,19 +64,19 @@ public class StaffEntity
             }
             else
             {
-                throw new ArgumentOutOfRangeException(nameof(Salary), $"Invalid salary range {value}");
+                throw new StaffEntityException(nameof(Salary), $"Invalid salary range {value}");
             }
         }
     }
 
-    public long DateOfBirth { get; set; }
+    internal long DateOfBirth { get; set; }
 
-    public int StaffID { get; set; }
+    internal int StaffID { get; set; }
 
     // Needed for serialization ???
-    public StaffEntity() { }
+    internal StaffEntity() { }
 
-    public StaffEntity(
+    internal StaffEntity(
         PersonalData personalData,
         EmploymentContract employmentContract,
         int staffID)

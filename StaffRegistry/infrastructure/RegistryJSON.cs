@@ -6,7 +6,7 @@ using StaffRegistry.utility;
 
 namespace StaffRegistry.infrastructure;
 
-public class RegistryJSON : IStaffRepository
+internal class RegistryJSON : IStaffRepository
 {
     private readonly string jsonFile = "restaurant.json";
     private readonly string jsonDir = "resources";

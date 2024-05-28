@@ -1,6 +1,6 @@
 ﻿namespace StaffRegistry.constant;
 
-public enum MenuItem
+internal enum MenuItem
 {
     ADD_STAFF,
     GET_STAFF,
