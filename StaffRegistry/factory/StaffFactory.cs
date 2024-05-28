@@ -12,7 +12,7 @@ internal class StaffFactory
         long dateOfBirth) 
     {
         PersonalData personalData = new(fName, lName, dateOfBirth);
-        EmploymentContract employmentContract = new(salary);
+        SoftwareITContract employmentContract = new(salary);
         return new StaffEntity(
             personalData,
             employmentContract,
@@ -28,7 +28,7 @@ internal class StaffFactory
         )
     {
         PersonalData personalData = new(fName, lName, dateOfBirth);
-        EmploymentContract employmentContract = new(salary);
+        SoftwareITContract employmentContract = new(salary);
         return new StaffEntity(
             personalData,
             employmentContract,

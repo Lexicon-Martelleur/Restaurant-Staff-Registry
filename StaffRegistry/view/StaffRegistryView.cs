@@ -23,7 +23,7 @@ internal class StaffRegistryView
 
         """);
     }
-    internal MenuItem ReadMenuSelection()
+    internal string ReadMenuSelection()
     {
         Console.WriteLine("""
 
@@ -41,15 +41,15 @@ internal class StaffRegistryView
         return GetSelectedMenuItem(selectedMenu ?? "");
     }
 
-    internal MenuItem GetSelectedMenuItem(string selectedMenu) => selectedMenu switch
+    internal string GetSelectedMenuItem(string selectedMenu) => selectedMenu switch
     {
-        "1" => MenuItem.ADD_STAFF,
-        "2" => MenuItem.GET_STAFF,
-        "3" => MenuItem.UPDATE_STAFF,
-        "4" => MenuItem.DELETE_STAFF,
-        "5" => MenuItem.LIST_ALL_STAFF,
-        "q" or "Q" => MenuItem.EXIT,
-        _ => MenuItem.DEFAULT
+        StaffMenu.ADD_STAFF or
+        StaffMenu.GET_STAFF or
+        StaffMenu.UPDATE_STAFF or
+        StaffMenu.DELETE_STAFF or
+        StaffMenu.LIST_ALL_STAFF or
+        StaffMenu.EXIT => selectedMenu,
+        _ => StaffMenu.DEFAULT
     };
 
     internal StaffInputData ReadNewStaffInput ()
@@ -89,7 +89,7 @@ internal class StaffRegistryView
 
     internal void PrintStaffAddedSuccessfully(
         PersonalData personalData,
-        EmploymentContract contract)
+        SoftwareITContract contract)
     {
         string dateOfBirth = DateUtility.ConvertTimeStampToDateString(personalData.DateOfBirth);
         Console.WriteLine($"""
@@ -105,7 +105,7 @@ internal class StaffRegistryView
 
     internal void PrintStaffAddedUnsuccessfully(
         PersonalData personalData,
-        EmploymentContract contract)
+        SoftwareITContract contract)
     {
         string dateOfBirth = DateUtility.ConvertTimeStampToDateString(personalData.DateOfBirth);
         Console.WriteLine($"""
@@ -156,14 +156,46 @@ internal class StaffRegistryView
         Console.WriteLine($"\n⚠️ Could not delete staff with id: {staffId}");
     }
 
-    internal void PrintDeleteStaffUnsuccessfully(int staffId)
+    internal void PrintDeletedStaffSuccessfully(int staffId)
+    {
+        Console.WriteLine($"✅ StaffID {staffId} deleted.");
+    }
+
+    internal void PrintDeletedStaffUnsuccessfully(int staffId)
     {
         Console.WriteLine($"\n⚠️ Could not delete staff with id: {staffId}");
     }
 
-    internal void PrintDeleteStaffSuccessfully(int staffId)
+    internal (string Id, StaffInputData Data) UpdateNewStaffInput()
     {
-        Console.WriteLine($"✅ StaffID {staffId} deleted.");
+        Console.Write("\nUpdate staff (ID FirstName LastName Salary$ DateOfBirth(yyyy-mm-dd)): ");
+        string staffStringData = Console.ReadLine() ?? "";
+        string[] staffData = staffStringData.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+
+        return (
+            Id: staffData[0],
+            Data: (
+                FName: staffData[1],
+                LName: staffData[2],
+                Salary: staffData[3],
+                DateOfBirth: staffData[4]
+            )
+        );
+    }
+
+    internal void PrintUpdatedStaffSuccessfully(StaffEntity staff)
+    {
+        Console.WriteLine($"✅ StaffID {staff.StaffID} updated.");
+    }
+
+    internal void PrintUpdatedStaffUnsuccessfully(int staffId)
+    {
+        Console.WriteLine($"\n⚠️ Could not update staff with id: {staffId}");
+    }
+
+    internal void PrintUpdatedStaffUnsuccessfully(string staffId)
+    {
+        Console.WriteLine($"\n⚠️ Could not update staff with id: {staffId}");
     }
 
     internal void PrintExit()

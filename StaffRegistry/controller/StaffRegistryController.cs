@@ -18,8 +18,9 @@ internal class StaffRegistryController(
         {
             try
             {
-                MenuItem menuItem = view.ReadMenuSelection();
-                useMenu = HandleMenuSelection(menuItem);
+                string menuSelection = view.ReadMenuSelection();
+                Console.WriteLine(menuSelection);
+                useMenu = HandleMenuSelection(menuSelection);
             }
             catch
             {
@@ -32,18 +33,19 @@ internal class StaffRegistryController(
     {
         service.AddStaffEventHandler += HandleAddStaffResult;
         service.GetStaffEventHandler += HandleGetStaffResult;
+        service.UpdateStaffEventHandler += HandleUpdateStaffResult;
         service.DeleteStaffEventHandler += HandleDeleteStaffResult;
     }
 
-    private bool HandleMenuSelection(MenuItem menuItem) => menuItem switch
+    private bool HandleMenuSelection(string menuSelection) => menuSelection switch
     {
-        MenuItem.ADD_STAFF => ContinueMenu(HandleAddStaffSelection, true),
-        MenuItem.GET_STAFF => ContinueMenu(HandleGetStaffSelection, true),
-        MenuItem.UPDATE_STAFF => ContinueMenu(HandleUpdateStaffSelection, true),
-        MenuItem.DELETE_STAFF => ContinueMenu(HandleDeleteStaffSelection, true),
-        MenuItem.LIST_ALL_STAFF => ContinueMenu(HandleGetStaffEntriesSelection, true),
-        MenuItem.DEFAULT => ContinueMenu(HandleInvalidChoice, true),
-        MenuItem.EXIT => ContinueMenu(HandleExit, false),
+        StaffMenu.ADD_STAFF => ContinueMenu(HandleAddStaffSelection, true),
+        StaffMenu.GET_STAFF => ContinueMenu(HandleGetStaffSelection, true),
+        StaffMenu.UPDATE_STAFF => ContinueMenu(HandleUpdateStaffSelection, true),
+        StaffMenu.DELETE_STAFF => ContinueMenu(HandleDeleteStaffSelection, true),
+        StaffMenu.LIST_ALL_STAFF => ContinueMenu(HandleGetStaffEntriesSelection, true),
+        StaffMenu.DEFAULT => ContinueMenu(HandleInvalidChoice, true),
+        StaffMenu.EXIT => ContinueMenu(HandleExit, false),
         _ => ContinueMenu(HandleInvalidChoice, true)
     };
 
@@ -67,7 +69,7 @@ internal class StaffRegistryController(
                 staffInputData.FName,
                 staffInputData.LName,
                 DateUtility.ConvertDateStringToTimeStamp(staffInputData.DateOfBirth));
-            EmploymentContract contract = new(
+            SoftwareITContract contract = new(
                 double.Parse(staffInputData.Salary));
             service.AddStaff(personalData, contract);
         }
@@ -127,7 +129,37 @@ internal class StaffRegistryController(
 
     private void HandleUpdateStaffSelection()
     {
-        throw new NotImplementedException();
+        var updateStaffData = view.UpdateNewStaffInput();
+        try
+        {
+            PersonalData personalData = new(
+                updateStaffData.Data.FName,
+                updateStaffData.Data.LName,
+                DateUtility.ConvertDateStringToTimeStamp(updateStaffData.Data.DateOfBirth));
+            SoftwareITContract contract = new(
+                double.Parse(updateStaffData.Data.Salary));
+            int staffId = int.Parse(updateStaffData.Id);
+            service.UpdateStaff(staffId, personalData, contract);
+        }
+        catch
+        {
+            view.PrintUpdatedStaffUnsuccessfully(updateStaffData.Id);
+        }
+    }
+
+    private void HandleUpdateStaffResult(
+        object? sender,
+        StaffRegistryEventArgs<UpdateStaffEventData> e)
+    {
+        StaffEntity? staff = e.Data.Staff;
+        if (e.Status == RepositoryResult.OK && staff != null)
+        {
+            view.PrintUpdatedStaffSuccessfully(staff);
+        }
+        if (e.Status == RepositoryResult.FAILURE)
+        {
+            view.PrintUpdatedStaffUnsuccessfully(e.Data.StaffId);
+        }
     }
 
     private void HandleDeleteStaffSelection()
@@ -149,11 +181,11 @@ internal class StaffRegistryController(
     {
         if (e.Status == RepositoryResult.OK)
         {
-            view.PrintDeleteStaffSuccessfully(e.Data);
+            view.PrintDeletedStaffSuccessfully(e.Data);
         }
         if (e.Status == RepositoryResult.FAILURE)
         {
-            view.PrintDeleteStaffUnsuccessfully(e.Data);
+            view.PrintDeletedStaffUnsuccessfully(e.Data);
         }
     }
 
@@ -161,6 +193,7 @@ internal class StaffRegistryController(
     {
         service.AddStaffEventHandler -= this.HandleAddStaffResult;
         service.GetStaffEventHandler -= this.HandleGetStaffResult;
+        service.UpdateStaffEventHandler -= HandleUpdateStaffResult;
         service.DeleteStaffEventHandler -= this.HandleDeleteStaffResult;
         view.PrintExit();
     }

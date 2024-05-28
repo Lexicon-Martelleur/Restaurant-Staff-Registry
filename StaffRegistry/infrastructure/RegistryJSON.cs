@@ -54,7 +54,7 @@ internal class RegistryJSON : IStaffRepository
         throw new NotImplementedException();
     }
 
-    public int UpdateStaff(int staffId)
+    public StaffEntity UpdateStaff(StaffEntity staffEntity)
     {
         throw new NotImplementedException();
     }

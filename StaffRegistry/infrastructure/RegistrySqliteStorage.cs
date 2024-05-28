@@ -16,8 +16,8 @@ internal class RegistrySqliteStorage(StaffFactory staffFactory) : IStaffReposito
         {
             FirstName = staff.FName,
             LastName = staff.LName,
-            Position = StaffEntity.Position,
-            Department = StaffEntity.Department,
+            Position = staff.Position,
+            Department = staff.Department,
             DateOfBirth = staff.DateOfBirth,
             Salary = staff.Salary,
         };
@@ -94,23 +94,6 @@ internal class RegistrySqliteStorage(StaffFactory staffFactory) : IStaffReposito
             staff.Id);
     }
 
-    public int UpdateStaff(int staffEntity)
-    {
-        //using StaffRegistryDB db = new();
-        //DB.Staff staffEntry = MapStaffEntityToDBStaffEntry(staffEntity);
-        //db.Staff?.Remove(staffEntry);
-
-        //#if DEBUG
-        //db.ChangeTracker.DetectChanges();
-        //Console.WriteLine("db.ChangeTracker.DebugView.LongView");
-        //Console.WriteLine(db.ChangeTracker.DebugView.LongView);
-        //#endif
-
-        //db.SaveChanges();
-        //return staffEntity;
-        return 0;
-    }
-
     public int DeleteStaff(int staffId)
     {
         using StaffRegistryDB db = new();
@@ -128,15 +111,32 @@ internal class RegistrySqliteStorage(StaffFactory staffFactory) : IStaffReposito
         return staffId;
     }
 
+    public StaffEntity UpdateStaff(StaffEntity staffEntity)
+    {
+        using StaffRegistryDB db = new();
+        DB.Staff staffEntry = MapStaffEntityToDBStaffEntry(staffEntity);
+        db.Staff?.Update(staffEntry);
+
+        #if DEBUG
+        db.ChangeTracker.DetectChanges();
+        Console.WriteLine("db.ChangeTracker.DebugView.LongView");
+        Console.WriteLine(db.ChangeTracker.DebugView.LongView);
+        #endif
+
+        db.SaveChanges();
+        return staffEntity;
+    }
+
     private DB.Staff MapStaffEntityToDBStaffEntry(StaffEntity staffEntity)
     {
         return new DB.Staff()
         {
             Id = staffEntity.StaffID,
             FirstName = staffEntity.FName,
-            LastName = staffEntity.FName,
-            Position = StaffEntity.Position,
-            Department = StaffEntity.Department,
+            LastName = staffEntity.LName,
+            Salary = staffEntity.Salary,
+            Position = staffEntity.Position,
+            Department = staffEntity.Department,
             DateOfBirth = staffEntity.DateOfBirth,
         };
     }

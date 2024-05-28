@@ -9,17 +9,17 @@ public class StaffEntityTest
         public static IEnumerable<object[]> ValidTestData = [
             [
                 new PersonalData("Eric", "Larson", 123),
-                new EmploymentContract(1234),
+                new SoftwareITContract(1234),
                 1
             ],
             [
                 new PersonalData("Lisa", "Larson", 123),
-                new EmploymentContract(1234),
+                new SoftwareITContract(1234),
                 2
             ],
             [
                 new PersonalData("Anna", "Larson", 123),
-                new EmploymentContract(1234),
+                new SoftwareITContract(1234),
                 3
             ],
         ];
@@ -28,7 +28,7 @@ public class StaffEntityTest
         [MemberData(nameof(ValidTestData))]
         internal void T1(
             PersonalData personalData,
-            EmploymentContract contract,
+            SoftwareITContract contract,
             int staffId)
         {
             StaffEntity staff = new(personalData, contract, staffId);
@@ -41,17 +41,17 @@ public class StaffEntityTest
         public static IEnumerable<object[]> InvalidTestData = [
             [
                 new PersonalData("Eric", "", 123),
-                new EmploymentContract(1234),
+                new SoftwareITContract(1234),
                 1
             ],
             [
                 new PersonalData("Lisa", "Scott", 123),
-                new EmploymentContract(0),
+                new SoftwareITContract(0),
                 2
             ],
             [
                 new PersonalData("", "", 123),
-                new EmploymentContract(1234),
+                new SoftwareITContract(1234),
                 3
             ],
         ];
@@ -60,7 +60,7 @@ public class StaffEntityTest
         [MemberData(nameof(InvalidTestData))]
         internal void T2(
             PersonalData personalData,
-            EmploymentContract contract,
+            SoftwareITContract contract,
             int staffId)
         {
             Assert.Throws<StaffEntityException>(() =>

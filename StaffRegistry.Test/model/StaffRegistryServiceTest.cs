@@ -26,30 +26,30 @@ public class StaffTest
         private readonly Fixture _f = fixture;
         private readonly List<EventHandler<StaffRegistryEventArgs<(
             PersonalData PersonalData,
-            EmploymentContract EmploymentContract
+            SoftwareITContract EmploymentContract
         )>>> eventHandlers = [];
         public static IEnumerable<object[]> TestData = [
             [
                 new PersonalData("Eric", "Larson", 123456),
-                new EmploymentContract(123)
+                new SoftwareITContract(123)
             ],
             [
                 new PersonalData("Mia", "Larson", 123456),
-                new EmploymentContract(123)
+                new SoftwareITContract(123)
             ],
             [
                 new PersonalData("Anna", "Nilsson", 123456),
-                new EmploymentContract(123)
+                new SoftwareITContract(123)
             ],
             [
                 new PersonalData("Carl", "Scott", 123456),
-                new EmploymentContract(123)
+                new SoftwareITContract(123)
             ]
         ];
 
         [Theory(DisplayName = "Call add staff to repository if valid staff data")]
         [MemberData(nameof(TestData))]
-        internal void T1(PersonalData personalData, EmploymentContract contract)
+        internal void T1(PersonalData personalData, SoftwareITContract contract)
         {
             
             _f.StaffRegistryService.AddStaff(personalData, contract);
@@ -64,14 +64,14 @@ public class StaffTest
 
         [Theory(DisplayName = "Raise OK event if valid staff data")]
         [MemberData(nameof(TestData))]
-        internal void T2(PersonalData personalData, EmploymentContract contract)
+        internal void T2(PersonalData personalData, SoftwareITContract contract)
         {
             bool isRaised = false;
             RepositoryResult result = RepositoryResult.FAILURE;
 
             EventHandler<StaffRegistryEventArgs<(
                 PersonalData PersonalData,
-                EmploymentContract EmploymentContract
+                SoftwareITContract EmploymentContract
             )>> handler = (sender, e) =>
             {
                 isRaised = true;
@@ -100,30 +100,30 @@ public class StaffTest
         private readonly Fixture _f = fixture;
         private readonly List<EventHandler<StaffRegistryEventArgs<(
             PersonalData PersonalData,
-            EmploymentContract EmploymentContract
+            SoftwareITContract EmploymentContract
         )>>> eventHandlers = [];
         public static IEnumerable<object[]> TestData = [
             [
                 new PersonalData("", "Larson", 123456),
-                new EmploymentContract(123)
+                new SoftwareITContract(123)
             ],
             [
                 new PersonalData("Mia", "Larson", 123456),
-                new EmploymentContract(0)
+                new SoftwareITContract(0)
             ],
             [
                 new PersonalData("Anna", "", 123456),
-                new EmploymentContract(123)
+                new SoftwareITContract(123)
             ],
             [
                 new PersonalData("", "", 123456),
-                new EmploymentContract(123)
+                new SoftwareITContract(123)
             ]
         ];
 
         [Theory(DisplayName = "Do not call add staff to repository if valid staff data")]
         [MemberData(nameof(TestData))]
-        internal void T1(PersonalData personalData, EmploymentContract contract)
+        internal void T1(PersonalData personalData, SoftwareITContract contract)
         {
 
             _f.StaffRegistryService.AddStaff(personalData, contract);
@@ -138,14 +138,14 @@ public class StaffTest
 
         [Theory(DisplayName = "Raise Failure event if valid staff data")]
         [MemberData(nameof(TestData))]
-        internal void T2(PersonalData personalData, EmploymentContract contract)
+        internal void T2(PersonalData personalData, SoftwareITContract contract)
         {
             bool isRaised = false;
             RepositoryResult result = RepositoryResult.FAILURE;
 
             EventHandler<StaffRegistryEventArgs<(
                 PersonalData PersonalData,
-                EmploymentContract EmploymentContract
+                SoftwareITContract EmploymentContract
             )>> handler = (sender, e) =>
             {
                 isRaised = true;

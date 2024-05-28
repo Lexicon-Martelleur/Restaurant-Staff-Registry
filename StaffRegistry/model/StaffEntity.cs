@@ -10,10 +10,6 @@ internal class StaffEntity
 
     internal const int MAX_NAME_SIZE = 100;
 
-    internal const string Position = "System Development";
-
-    internal const string Department = "IT";
-    
     private string _fName = "Anonymous";
     
     private string _lName = "Anonymous";
@@ -71,20 +67,29 @@ internal class StaffEntity
 
     internal long DateOfBirth { get; set; }
 
+    internal string Department { get; set; }
+
+    internal string Position { get; set; }
+
     internal int StaffID { get; set; }
 
     // Needed for serialization ???
-    internal StaffEntity() { }
+    internal StaffEntity() {
+        Department = "NONE";
+        Position = "STANDARD";
+    }
 
     internal StaffEntity(
         PersonalData personalData,
-        EmploymentContract employmentContract,
+        SoftwareITContract employmentContract,
         int staffID)
     {
         FName = personalData.FName;
         LName = personalData.LName;
         DateOfBirth = personalData.DateOfBirth;
         Salary = employmentContract.Salary;
+        Department = employmentContract.Department;
+        Position = employmentContract.Position;
         StaffID = staffID;
     }
 }

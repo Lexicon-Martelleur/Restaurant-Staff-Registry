@@ -8,7 +8,7 @@ internal interface IStaffRepository
 
     StaffEntity GetStaff(int id);
 
-    int UpdateStaff(int staffId);
+    StaffEntity UpdateStaff(StaffEntity staffEntity);
 
     int DeleteStaff(int staffId);
 }

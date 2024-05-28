@@ -17,9 +17,11 @@ internal class StaffRegistryService(IStaffRepository repository, StaffFactory st
 
     internal EventHandler<StaffRegistryEventArgs<int>>? DeleteStaffEventHandler;
 
-    internal EventHandler<StaffRegistryEventArgs<int>>? UpdateStaffEventHandler;
+    internal EventHandler<
+        StaffRegistryEventArgs<UpdateStaffEventData>
+    >? UpdateStaffEventHandler;
 
-    internal void AddStaff(PersonalData personalData, EmploymentContract contract)
+    internal void AddStaff(PersonalData personalData, SoftwareITContract contract)
     {
         try {
             StaffEntity staff = staffFactory.CreateStaffEntity(
@@ -35,7 +37,7 @@ internal class StaffRegistryService(IStaffRepository repository, StaffFactory st
             OnAddStaffFailure(personalData, contract, ex.Message);
             
         }
-        catch (Exception ex)
+        catch
         {
             OnAddStaffFailure(personalData, contract, "Invalid property value");
         }
@@ -43,7 +45,7 @@ internal class StaffRegistryService(IStaffRepository repository, StaffFactory st
 
     private void OnAddStaffOk(
         PersonalData data,
-        EmploymentContract contract)
+        SoftwareITContract contract)
     {
         StaffRegistryEventArgs<AddStaffEventData> eventArgs = new(
             RepositoryResult.OK,
@@ -54,7 +56,7 @@ internal class StaffRegistryService(IStaffRepository repository, StaffFactory st
 
     private void OnAddStaffFailure(
         PersonalData data,
-        EmploymentContract contract,
+        SoftwareITContract contract,
         string msg)
     {
         StaffRegistryEventArgs<AddStaffEventData> eventArgs = new(
@@ -130,12 +132,21 @@ internal class StaffRegistryService(IStaffRepository repository, StaffFactory st
         DeleteStaffEventHandler?.Invoke(this, eventArgs);
     }
 
-    internal void UpdateStaff(int staffId)
+    internal void UpdateStaff(
+        int staffId,
+        PersonalData personalData,
+        SoftwareITContract contract)
     {
         try
         {
-            repository.UpdateStaff(staffId);
-            OnUpdateStaffOk(staffId);
+            StaffEntity staff = staffFactory.GetStaffEntity(
+                personalData.FName,
+                personalData.LName,
+                contract.Salary,
+                personalData.DateOfBirth,
+                staffId);
+            repository.UpdateStaff(staff);
+            OnUpdateStaffOk(staff);
         }
         catch
         {
@@ -143,21 +154,21 @@ internal class StaffRegistryService(IStaffRepository repository, StaffFactory st
         }
     }
 
-    private void OnUpdateStaffOk(int staffId)
+    private void OnUpdateStaffOk(StaffEntity staff)
     {
-        StaffRegistryEventArgs<int> eventArgs = new(
+        StaffRegistryEventArgs<UpdateStaffEventData> eventArgs = new(
             RepositoryResult.OK,
             "Update staff OK",
-            staffId);
+            (StaffId: staff.StaffID, Staff: staff));
         UpdateStaffEventHandler?.Invoke(this, eventArgs);
     }
 
     private void OnUpdateStaffFailure(int staffId)
     {
-        StaffRegistryEventArgs<int> eventArgs = new(
+        StaffRegistryEventArgs<UpdateStaffEventData> eventArgs = new(
             RepositoryResult.FAILURE,
             "Update staff failure",
-            staffId);
+            (StaffId: staffId, Staff: null));
         UpdateStaffEventHandler?.Invoke(this, eventArgs);
     }
 }
